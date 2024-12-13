@@ -2,6 +2,7 @@ import { Divider, List } from "@mui/material";
 import { Post } from "../data/models";
 import PostItem from "./PostItem";
 
+// List of posts displayed in the HomePage
 export default function PostList() {
   return (
     <List sx={{ width: "100%" }}>
