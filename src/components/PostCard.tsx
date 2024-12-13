@@ -4,7 +4,7 @@ import { Post } from "../data/models";
 export default function PostCard({ post }: { post: Post }) {
   return (
     <Card>
-      <CardHeader title={post.title} subheader={post.author.username}/>
+      <CardHeader title={post.title} subheader={post.author?.username}/>
       <CardContent>
         <Typography>{post.content}</Typography>
       </CardContent>
