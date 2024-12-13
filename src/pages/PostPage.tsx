@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import CommentList from "../components/CommentList";
 import PostCard from "../components/PostCard";
 import { Comment, Post, User } from "../data/models";
+import AddCommentBox from "../components/AddCommentBox";
 
 export default function PostPage() {
   // TODO: Fetch post based on id param
@@ -12,7 +13,7 @@ export default function PostPage() {
 
   const post: Post = {
     id: 1,
-    title: "God is dead",
+    title: "God is Dead",
     content:
       "God is dead. God remains dead. And we have killed him. How shall we comfort ourselves, the murderers of all murderers?",
     authorId: 1,
@@ -22,7 +23,8 @@ export default function PostPage() {
   const comments: Comment[] = [
     {
       id: 1,
-      content: "What was holiest and mightiest of all that the world has ever owned has bled to death under our knives. Who will wipe this blood off us?",
+      content:
+        "What was holiest and mightiest of all that the world has ever owned has bled to death under our knives. Who will wipe this blood off us?",
       authorId: 1,
       author: user,
     },
@@ -37,6 +39,7 @@ export default function PostPage() {
   return (
     <>
       <PostCard post={post} />
+      <AddCommentBox />
       <Box padding={1}>
         {comments.length > 0 ? (
           <CommentList comments={comments} />
