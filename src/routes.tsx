@@ -20,7 +20,7 @@ export default function AppRouter() {
             <Route index element={<Home />} />
             <Route path=":id" element={<PostPage/>}/>
             <Route path="create" element={<CreatePostPage/>}/>
-            <Route path="edit" element={<EditPostPage/>}/>
+            <Route path=":id/edit" element={<EditPostPage/>}/>
           </Route>
 
           <Route path="profiles">
