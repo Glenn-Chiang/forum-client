@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router";
+import AlertDialog from "./AlertDialog";
 
 export default function PostActionMenu({ postId }: { postId: number }) {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
@@ -41,12 +42,20 @@ export default function PostActionMenu({ postId }: { postId: number }) {
             <ListItemText>Edit</ListItemText>
           </MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Delete />
-          </ListItemIcon>
-          <ListItemText>Delete</ListItemText>
-        </MenuItem>
+        <AlertDialog
+          triggerButton={
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <Delete />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+            </MenuItem>
+          }
+          title="Delete this post?"
+          text="This action cannot be undone"
+          handleOk={handleClose}
+          handleCancel={handleClose}
+        />
       </Menu>
     </>
   );
