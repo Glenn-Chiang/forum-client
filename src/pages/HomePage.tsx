@@ -1,12 +1,7 @@
 import { useGetPostsQuery } from "../api/apiSlice";
-import { Post } from "../api/models";
+import ErrorAlert from "../components/ErrorAlert";
+import LoadingSkeleton from "../components/LoadingSkeleton";
 import PostList from "../components/PostList";
-
-// const posts: Post[] = [
-//   { id: 1, title: "Post 1", content: "Hello world" },
-//   { id: 2, title: "Post 2", content: "Hello world" },
-//   { id: 3, title: "Post 3", content: "Hello world" },
-// ];
 
 export default function Home() {
   const {
@@ -20,11 +15,11 @@ export default function Home() {
   return (
     <>
       {isLoading ? (
-        <div>Loading...</div>
+        <LoadingSkeleton/>
       ) : isSuccess ? (
         <PostList posts={posts} />
       ) : (
-        <div>Error</div>
+        <ErrorAlert/>
       )}
     </>
   );
