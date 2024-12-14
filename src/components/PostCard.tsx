@@ -6,7 +6,7 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <Card sx={{ position: "relative" }}>
       <CardHeader title={post.title} subheader={post.author?.username} />
-      <PostActionMenu />
+      <PostActionMenu postId={post.id}/>
       <CardContent>
         <Typography>{post.content}</Typography>
       </CardContent>

@@ -1,14 +1,16 @@
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import {
   IconButton,
+  Link,
   ListItemIcon,
   ListItemText,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router";
 
-export default function PostActionMenu() {
+export default function PostActionMenu({ postId }: { postId: number }) {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const open = Boolean(anchor);
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -27,12 +29,18 @@ export default function PostActionMenu() {
         <MoreVert />
       </IconButton>
       <Menu anchorEl={anchor} open={open} onClose={handleClose}>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Edit />
-          </ListItemIcon>
-          <ListItemText>Edit</ListItemText>
-        </MenuItem>
+        <Link
+          component={RouterLink}
+          to={`/posts/${postId}/edit`}
+          style={{ color: "inherit", textDecoration: "none" }}
+        >
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Edit />
+            </ListItemIcon>
+            <ListItemText>Edit</ListItemText>
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Delete />
