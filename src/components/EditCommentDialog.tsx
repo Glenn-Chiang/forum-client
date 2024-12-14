@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material";
 import React, { ReactElement, useState } from "react";
-import { Comment } from "../data/models";
+import { Comment } from "../api/models";
 
 interface EditCommentDialogProps {
   comment: Comment;

@@ -1,5 +1,5 @@
 import { Divider, List } from "@mui/material";
-import { Comment } from "../data/models";
+import { Comment } from "../api/models";
 import CommentItem from "./CommentItem";
 
 export default function CommentList({comments}: {comments: Comment[]}) {

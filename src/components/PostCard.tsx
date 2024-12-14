@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { Post } from "../data/models";
+import { Post } from "../api/models";
 import PostActionMenu from "./PostActionMenu";
 
 export default function PostCard({ post }: { post: Post }) {

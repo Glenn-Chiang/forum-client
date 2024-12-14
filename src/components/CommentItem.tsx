@@ -1,6 +1,6 @@
 import { Link, ListItem, ListItemText } from "@mui/material";
 import { Link as RouterLink } from "react-router";
-import { Comment } from "../data/models";
+import { Comment } from "../api/models";
 import CommentActionMenu from "./CommentActionMenu";
 
 export default function CommentItem({ comment }: { comment: Comment }) {

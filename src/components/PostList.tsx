@@ -1,5 +1,5 @@
 import { Divider, List } from "@mui/material";
-import { Post } from "../data/models";
+import { Post } from "../api/models";
 import PostItem from "./PostItem";
 
 // List of posts displayed in the HomePage

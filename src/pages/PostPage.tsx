@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import CommentList from "../components/CommentList";
 import PostCard from "../components/PostCard";
-import { Comment, Post, User } from "../data/models";
+import { Comment, Post, User } from "../api/models";
 import AddCommentBox from "../components/AddCommentBox";
 
 export default function PostPage() {

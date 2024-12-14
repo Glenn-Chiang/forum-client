@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { Post, User } from "../data/models";
+import { Post, User } from "../api/models";
 
 export default function EditPostPage() {
   // TODO: Fetch post based on id param

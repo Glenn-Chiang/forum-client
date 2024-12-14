@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import AlertDialog from "./AlertDialog";
-import { Comment } from "../data/models";
+import { Comment } from "../api/models";
 import EditCommentDialog from "./EditCommentDialog";
 
 export default function CommentActionMenu({ comment }: { comment: Comment }) {
