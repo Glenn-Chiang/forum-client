@@ -9,8 +9,8 @@ export default function CreatePostPage() {
         fullWidth
         placeholder="Content"
         multiline
-        rows={5}
-        maxRows={20}
+        minRows={5}
+        maxRows={10}
       />
       <Button sx={{maxWidth: 100}} variant="contained">Post</Button>
     </Box>
