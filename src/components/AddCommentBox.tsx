@@ -12,9 +12,9 @@ import { useAppSelector } from "../store";
 import ErrorAlert from "./feedback/ErrorAlert";
 import { useToast } from "./feedback/ToastProvider";
 
-export default function AddCommentBox({postId}: {postId: number}) {
+export default function AddCommentBox({ postId }: { postId: number }) {
   // Get current userId
-    const userId = useAppSelector(selectCurrentUserId);
+  const userId = useAppSelector(selectCurrentUserId);
 
   // Redux mutation function
   const [createComment, { isLoading }] = useCreateCommentMutation();
@@ -31,20 +31,25 @@ export default function AddCommentBox({postId}: {postId: number}) {
   const [error, setError] = useState<string | null>(null);
 
   // Global toast hook
-  const toast = useToast()
+  const toast = useToast();
 
   // On submit, send comment data to the api
   const onSubmit: SubmitHandler<CommentFormSchema> = async (data) => {
     try {
-      await createComment({...data, postId, authorId: userId!}).unwrap()
-      
-      reset()
-     
+      await createComment({ ...data, postId, authorId: userId! }).unwrap();
+
+      reset();
+
       // Display toast to alert the user that the comment was successfully posted
-      toast.display('Comment posted!', 'success')
+      toast.display("Comment posted!", "success");
     } catch (err) {
       setError("Error posting comment");
     }
+  };
+
+  // Clear text field when cancel button is clicked
+  const handleCancel = () => {
+    reset();
   };
 
   return (
@@ -77,7 +82,9 @@ export default function AddCommentBox({postId}: {postId: number}) {
         <Button type="submit" disabled={isLoading} variant="text">
           Comment
         </Button>
-        <Button variant="text" disabled={isLoading}>Cancel</Button>
+        <Button onClick={handleCancel} variant="text" disabled={isLoading}>
+          Cancel
+        </Button>
       </Stack>
       <Divider />
     </Box>

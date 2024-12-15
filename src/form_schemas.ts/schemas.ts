@@ -21,4 +21,4 @@ export const commentFormSchema = z.object({
     .nonempty("Comment cannot be empty")
     .max(1000, { message: "Comment cannot be longer than 1000 characters" }),
 });
-export type CommentFormSchema = z.infer<typeof commentFormSchema>
+export type CommentFormSchema = z.infer<typeof commentFormSchema>;
