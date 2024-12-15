@@ -26,7 +26,7 @@ export default function CommentActionMenu({ comment }: { comment: Comment }) {
     setAnchor(null);
   };
 
-  // Hooks to edit and delete comment
+  // Hook to delete comment
   const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();
 
   // Global toast hook
@@ -35,6 +35,8 @@ export default function CommentActionMenu({ comment }: { comment: Comment }) {
   const handleDelete = async () => {
     try {
       await deleteComment(comment).unwrap()
+      // Display toast to alert the user that the comment was successfully deleted
+      toast.display("Comment deleted", 'success')
       handleClose();
     } catch (err) {
       toast.display("Error deleting comment", "error")
