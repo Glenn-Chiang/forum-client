@@ -1,5 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Comment, NewPost, Post, PostUpdate } from "./models";
+import {
+  Comment,
+  CommentUpdate,
+  NewComment,
+  NewPost,
+  Post,
+  PostUpdate,
+} from "./models";
 import { snakeCase } from "change-case/keys";
 
 export const apiSlice = createApi({
@@ -12,8 +19,8 @@ export const apiSlice = createApi({
       providesTags: ["posts"],
     }),
     getPost: builder.query<Post, string>({
-      query: (postId) => `/posts/${postId}`,
-      providesTags: (result, error, id) => [{ type: "posts", id }],
+      query: (id) => `/posts/${id}`,
+      providesTags: (_res, _err, id) => [{ type: "posts", id }],
     }),
     createPost: builder.mutation<Post, NewPost>({
       query: (post) => ({
@@ -29,11 +36,43 @@ export const apiSlice = createApi({
         method: "PATCH",
         body: { title: post.title, content: post.content },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "posts", id }],
+      invalidatesTags: (_res, _err, { id }) => [{ type: "posts", id }],
+    }),
+    deletePost: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/posts/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_res, _err, id) => [{ type: "posts", id }],
     }),
     getPostComments: builder.query<Comment[], string>({
       query: (postId) => `/posts/${postId}/comments`,
-      providesTags: ["comments"],
+      providesTags: (_res, _err, postId) => [{ type: "comments", id: postId }],
+    }),
+    createComment: builder.mutation<Comment, NewComment>({
+      query: (comment) => ({
+        url: "/comments",
+        method: "POST",
+        body: snakeCase(comment),
+      }),
+      invalidatesTags: ["comments"],
+    }),
+    updateComment: builder.mutation<Comment, CommentUpdate>({
+      query: (comment) => ({
+        url: `/comments/${comment.id}`,
+        method: "PATCH",
+        body: { content: comment.content },
+      }),
+      invalidatesTags: (_res, _err, { postId }) => [
+        { type: "comments", id: postId },
+      ],
+    }),
+    deleteComment: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/comments/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_res, _err, id) => [{ type: "comments", id }],
     }),
   }),
 });
@@ -43,5 +82,9 @@ export const {
   useGetPostQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
+  useDeletePostMutation,
   useGetPostCommentsQuery,
+  useCreateCommentMutation,
+  useUpdateCommentMutation,
+  useDeleteCommentMutation,
 } = apiSlice;

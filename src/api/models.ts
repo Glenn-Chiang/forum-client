@@ -38,5 +38,6 @@ export interface NewComment {
 
 export interface CommentUpdate {
   id: number
+  postId: number,
   content: string
 }

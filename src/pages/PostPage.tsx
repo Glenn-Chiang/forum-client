@@ -28,7 +28,7 @@ export default function PostPage() {
     return (
       <section>
         <PostCard post={post} />
-        <AddCommentBox />
+        <AddCommentBox postId={Number(postId)}/>
         <CommentSection />
       </section>
     );
