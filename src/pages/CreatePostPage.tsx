@@ -15,7 +15,7 @@ export default function CreatePostPage() {
   // Get current userId
   const userId = useAppSelector(selectCurrentUserId);
 
-  // Redux mutation hook
+  // Redux mutation function
   const [createPost, { isLoading }] = useCreatePostMutation();
 
   // Form utils
@@ -23,14 +23,14 @@ export default function CreatePostPage() {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<PostFormSchema>({resolver: zodResolver(postFormSchema)});
+  } = useForm<PostFormSchema>({ resolver: zodResolver(postFormSchema) });
 
   // Server error state
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null);
 
   // Functions to redirect and display toast alert
-  const navigate = useNavigate()
-  const toast = useToast()
+  const navigate = useNavigate();
+  const toast = useToast();
 
   // On submit, send the post data to the api
   const onSubmit: SubmitHandler<PostFormSchema> = async (data) => {
@@ -39,15 +39,14 @@ export default function CreatePostPage() {
         ...data,
         authorId: userId!,
       }).unwrap();
-      
-      // Redirect to the newly-created post page
-      navigate(`/posts/${newPost.id}`)
-      
-      // Display toast to alert the user that the post was successfully created
-      toast.display('Post created!', 'success')
 
+      // Redirect to the newly-created post page
+      navigate(`/posts/${newPost.id}`);
+
+      // Display toast to alert the user that the post was successfully created
+      toast.display("Post created!", "success");
     } catch (err) {
-      setError("Error creating post")
+      setError("Error creating post");
     }
   };
 
@@ -65,7 +64,7 @@ export default function CreatePostPage() {
       gap={1}
     >
       <Typography variant="h6">Create a Post</Typography>
-      {error && <ErrorAlert message={error}/>}
+      {error && <ErrorAlert message={error} />}
       <Controller
         name="title"
         control={control}
