@@ -8,8 +8,6 @@ export default function Home() {
     data: posts = [],
     isLoading,
     isSuccess,
-    isError,
-    error,
   } = useGetPostsQuery();
 
   return (

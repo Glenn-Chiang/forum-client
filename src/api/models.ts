@@ -1,19 +1,19 @@
 export interface User {
-  id: number,
+  id: string,
   username: string
 }
 
 export interface Post {
-  id: number,
+  id: string,
   title: string,
   content: string,
-  authorId?: number,
+  authorId?: string,
   author?: User
 }
 
 export interface Comment {
-  id: number, 
+  id: string, 
   content: string,
-  authorId: number,
+  authorId: string,
   author: User
 }
