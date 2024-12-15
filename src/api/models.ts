@@ -24,8 +24,9 @@ export interface PostUpdate {
 }
 
 export interface Comment {
-  id: string, 
+  id: number, 
   content: string,
+  postId: number,
   authorId: number,
   author: User
 }

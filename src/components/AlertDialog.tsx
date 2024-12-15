@@ -15,6 +15,7 @@ interface AlertDialogProps {
   text: string;
   handleOk: () => void;
   handleCancel: () => void;
+  pending?: boolean
 }
 
 export default function AlertDialog({
@@ -23,6 +24,7 @@ export default function AlertDialog({
   text,
   handleOk,
   handleCancel,
+  pending
 }: AlertDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -53,8 +55,8 @@ export default function AlertDialog({
           <DialogContentText>{text}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClickOk}>Ok</Button>
+          <Button disabled={pending} onClick={handleClose}>Cancel</Button>
+          <Button disabled={pending} onClick={handleClickOk}>Ok</Button>
         </DialogActions>
       </Dialog>
     </>

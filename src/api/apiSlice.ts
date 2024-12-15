@@ -67,12 +67,12 @@ export const apiSlice = createApi({
         { type: "comments", id: postId },
       ],
     }),
-    deleteComment: builder.mutation<void, string>({
-      query: (id) => ({
-        url: `/comments/${id}`,
+    deleteComment: builder.mutation<void, Comment>({
+      query: (comment) => ({
+        url: `/comments/${comment.id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_res, _err, id) => [{ type: "comments", id }],
+      invalidatesTags: (_res, _err, {postId}) => [{ type: "comments", id: postId }],
     }),
   }),
 });

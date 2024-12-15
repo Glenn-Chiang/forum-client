@@ -7,11 +7,16 @@ import {
   MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
-import AlertDialog from "./AlertDialog";
+import {
+  useDeleteCommentMutation
+} from "../api/apiSlice";
 import { Comment } from "../api/models";
+import AlertDialog from "./AlertDialog";
 import EditCommentDialog from "./EditCommentDialog";
+import { useToast } from "./feedback/ToastProvider";
 
 export default function CommentActionMenu({ comment }: { comment: Comment }) {
+  // Handle menu UI
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const open = Boolean(anchor);
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -19,6 +24,21 @@ export default function CommentActionMenu({ comment }: { comment: Comment }) {
   };
   const handleClose = () => {
     setAnchor(null);
+  };
+
+  // Hooks to edit and delete comment
+  const [deleteComment, { isLoading: isDeleting }] = useDeleteCommentMutation();
+
+  // Global toast hook
+  const toast = useToast()
+
+  const handleDelete = async () => {
+    try {
+      await deleteComment(comment).unwrap()
+      handleClose();
+    } catch (err) {
+      toast.display("Error deleting comment", "error")
+    }
   };
 
   return (
@@ -53,8 +73,9 @@ export default function CommentActionMenu({ comment }: { comment: Comment }) {
           }
           title="Delete this comment?"
           text="This action cannot be undone"
-          handleOk={handleClose}
+          handleOk={handleDelete}
           handleCancel={handleClose}
+          pending={isDeleting}
         />
       </Menu>
     </>

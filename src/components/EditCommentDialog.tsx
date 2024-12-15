@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { ReactElement, useState } from "react";
 import { Comment } from "../api/models";
+import { useUpdateCommentMutation } from "../api/apiSlice";
 
 interface EditCommentDialogProps {
   comment: Comment;
@@ -21,19 +22,22 @@ export default function EditCommentDialog({
   triggerButton,
   handleCancel,
 }: EditCommentDialogProps) {
+  // Handle dialog UI state
   const [open, setOpen] = useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
     handleCancel();
   };
 
+  // Hook to send comment update to api
+  const [updateComment, { isLoading }] = useUpdateCommentMutation();
+
   const handleSubmit: React.FormEventHandler = (event) => {
     event.preventDefault();
+    
     handleClose();
   };
 
