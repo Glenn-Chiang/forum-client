@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Comment, Post } from "./models";
+import { Comment, NewPost, Post } from "./models";
+import { snakeCase } from "change-case/keys";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -14,8 +15,19 @@ export const apiSlice = createApi({
     getPostComments: builder.query<Comment[], string>({
       query: (postId) => `/posts/${postId}/comments`,
     }),
+    createPost: builder.mutation<Post, NewPost>({
+      query: (newPost) => ({
+        url: "/posts",
+        method: "POST",
+        body: snakeCase(newPost),
+      }),
+    }),
   }),
 });
 
-export const { useGetPostsQuery, useGetPostQuery, useGetPostCommentsQuery } =
-  apiSlice;
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useGetPostCommentsQuery,
+  useCreatePostMutation,
+} = apiSlice;

@@ -3,18 +3,18 @@ import { RootState } from "../store"
 
 
 interface AuthState {
-  userId: string | null
+  userId: number | null
 }
 
 const initialState : AuthState = {
-  userId: "1"
+  userId: 1
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<string>) {
+    login(state, action: PayloadAction<number>) {
       state.userId = action.payload
     },
     logout(state) {

@@ -1,14 +1,20 @@
 export interface User {
-  id: string,
+  id: number,
   username: string
 }
 
 export interface Post {
-  id: string,
+  id: number,
   title: string,
   content: string,
-  authorId?: string,
+  authorId?: number,
   author?: User
+}
+
+export interface NewPost {
+  title: string,
+  content: string,
+  authorId: number
 }
 
 export interface Comment {
