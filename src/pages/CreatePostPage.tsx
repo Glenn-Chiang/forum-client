@@ -5,7 +5,7 @@ import { selectCurrentUserId } from "../auth/authSlice";
 import InfoAlert from "../components/alerts/InfoAlert";
 import { useAppSelector } from "../store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createPostSchema, CreatePostSchema } from "../form_schemas.ts/schemas";
+import { postFormSchema, PostFormSchema } from "../form_schemas.ts/schemas";
 import { useState } from "react";
 import ErrorAlert from "../components/alerts/ErrorAlert";
 
@@ -21,13 +21,13 @@ export default function CreatePostPage() {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<CreatePostSchema>({resolver: zodResolver(createPostSchema)});
+  } = useForm<PostFormSchema>({resolver: zodResolver(postFormSchema)});
 
   const [error, setError] = useState<string | null>(null)
 
   // On submit, send the post data to the api
   // TODO: Upon success, redirect to previous page
-  const onSubmit: SubmitHandler<CreatePostSchema> = async (data) => {
+  const onSubmit: SubmitHandler<PostFormSchema> = async (data) => {
     try {
       const res = await createPost({
         ...data,
