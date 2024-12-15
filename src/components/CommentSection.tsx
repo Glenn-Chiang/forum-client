@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useGetPostCommentsQuery } from "../api/apiSlice";
 import LoadingSkeleton from "./LoadingSkeleton";
-import ErrorAlert from "./alerts/ErrorAlert";
+import ErrorAlert from "./feedback/ErrorAlert";
 import { Box, Typography } from "@mui/material";
 import CommentList from "./CommentList";
 

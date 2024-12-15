@@ -1,5 +1,5 @@
 import { useGetPostsQuery } from "../api/apiSlice";
-import ErrorAlert from "../components/alerts/ErrorAlert";
+import ErrorAlert from "../components/feedback/ErrorAlert";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import PostList from "../components/PostList";
 

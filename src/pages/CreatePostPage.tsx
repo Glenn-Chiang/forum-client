@@ -2,13 +2,14 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useCreatePostMutation } from "../api/apiSlice";
 import { selectCurrentUserId } from "../auth/authSlice";
-import InfoAlert from "../components/alerts/InfoAlert";
+import InfoAlert from "../components/feedback/InfoAlert";
 import { useAppSelector } from "../store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { postFormSchema, PostFormSchema } from "../form_schemas.ts/schemas";
 import { useState } from "react";
-import ErrorAlert from "../components/alerts/ErrorAlert";
+import ErrorAlert from "../components/feedback/ErrorAlert";
 import { useNavigate } from "react-router";
+import { useToast } from "../components/feedback/ToastProvider";
 
 export default function CreatePostPage() {
   // Get current userId
@@ -27,7 +28,9 @@ export default function CreatePostPage() {
   // Server error state
   const [error, setError] = useState<string | null>(null)
 
+  // Functions to redirect and display toast alert
   const navigate = useNavigate()
+  const toast = useToast()
 
   // On submit, send the post data to the api
   const onSubmit: SubmitHandler<PostFormSchema> = async (data) => {
@@ -39,6 +42,9 @@ export default function CreatePostPage() {
       
       // Redirect to the newly-created post page
       navigate(`/posts/${newPost.id}`)
+      
+      // Display toast to alert the user that the post was successfully created
+      toast.display('Post created!', 'success')
 
     } catch (err) {
       setError("Error creating post")
