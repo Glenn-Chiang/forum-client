@@ -1,9 +1,14 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useAppSelector } from "../store";
 import { selectCurrentUserId } from "../auth/authSlice";
+import InfoAlert from "../components/alerts/InfoAlert";
 
 export default function CreatePostPage() {
   const userId = useAppSelector(selectCurrentUserId)
+
+  if (!userId) {
+    return <InfoAlert message="Login to create a post"/>
+  }
 
   return (
     <Box padding={1} display="flex" flexDirection="column" gap={1}>

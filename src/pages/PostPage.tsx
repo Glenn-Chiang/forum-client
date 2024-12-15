@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import { useGetPostQuery } from "../api/apiSlice";
 import AddCommentBox from "../components/AddCommentBox";
 import CommentSection from "../components/CommentSection";
-import ErrorAlert from "../components/ErrorAlert";
+import ErrorAlert from "../components/alerts/ErrorAlert";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import PostCard from "../components/PostCard";
 
