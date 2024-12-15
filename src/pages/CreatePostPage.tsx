@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { postFormSchema, PostFormSchema } from "../form_schemas.ts/schemas";
 import { useState } from "react";
 import ErrorAlert from "../components/alerts/ErrorAlert";
+import { useNavigate } from "react-router";
 
 export default function CreatePostPage() {
   // Get current userId
@@ -23,19 +24,23 @@ export default function CreatePostPage() {
     formState: { errors },
   } = useForm<PostFormSchema>({resolver: zodResolver(postFormSchema)});
 
+  // Server error state
   const [error, setError] = useState<string | null>(null)
 
+  const navigate = useNavigate()
+
   // On submit, send the post data to the api
-  // TODO: Upon success, redirect to previous page
   const onSubmit: SubmitHandler<PostFormSchema> = async (data) => {
     try {
-      const res = await createPost({
+      const newPost = await createPost({
         ...data,
         authorId: userId!,
       }).unwrap();
+      
+      // Redirect to the newly-created post page
+      navigate(`/posts/${newPost.id}`)
+
     } catch (err) {
-      // Display server error as ErrorAlert
-      console.log(err)
       setError("Error creating post")
     }
   };
