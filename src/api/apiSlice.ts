@@ -5,15 +5,14 @@ import { snakeCase } from "change-case/keys";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
+  tagTypes: ['post', 'comment'],
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
       query: () => "/posts",
+      providesTags: ['post']
     }),
     getPost: builder.query<Post, string>({
       query: (postId) => `/posts/${postId}`,
-    }),
-    getPostComments: builder.query<Comment[], string>({
-      query: (postId) => `/posts/${postId}/comments`,
     }),
     createPost: builder.mutation<Post, NewPost>({
       query: (newPost) => ({
@@ -21,6 +20,11 @@ export const apiSlice = createApi({
         method: "POST",
         body: snakeCase(newPost),
       }),
+      invalidatesTags: ['post']
+    }),
+    getPostComments: builder.query<Comment[], string>({
+      query: (postId) => `/posts/${postId}/comments`,
+      providesTags: ['comment']
     }),
   }),
 });
