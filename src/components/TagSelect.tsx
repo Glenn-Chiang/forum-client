@@ -8,18 +8,19 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { useState } from "react";
 import { Topic } from "../api/models";
 
-export default function TagSelect() {
+interface TagSelectProps {
+  selectedTags: number[],
+  setSelectedTags: (tagIds: number[]) => void
+}
+
+export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProps) {
   const topics: Topic[] = [
     { id: 1, name: "Philosophy" },
     { id: 2, name: "Literature" },
   ];
   // const {data: topics, isLoading, isSuccess} = useGetTopicsQuery()
-
-  // Keep track of selected topic IDs
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   // Update the state of selected topic IDs whenever new values are selected/unselected
   const handleChange = (event: SelectChangeEvent<string[]>) => {
@@ -27,7 +28,7 @@ export default function TagSelect() {
     // event.target.value may be returned as a string, so we explicitly split the string into an array
     const value = event.target.value;
     const selectedIds = typeof value === "string" ? value.split(",") : value;
-    setSelectedTopics(selectedIds);
+    setSelectedTags(selectedIds.map(id => Number(id)));
   };
 
   // Render the Chip UI component for the given tag
@@ -41,7 +42,7 @@ export default function TagSelect() {
       <InputLabel>Tags</InputLabel>
       <Select
         multiple
-        value={selectedTopics}
+        value={selectedTags.map(id => id.toString())}
         onChange={handleChange}
         input={<OutlinedInput label={"Tags"} />}
         MenuProps={{
