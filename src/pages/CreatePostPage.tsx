@@ -10,6 +10,7 @@ import { useState } from "react";
 import ErrorAlert from "../components/feedback/ErrorAlert";
 import { useNavigate } from "react-router";
 import { useToast } from "../components/feedback/ToastProvider";
+import TagSelect from "../components/TagSelect";
 
 export default function CreatePostPage() {
   // Get current userId
@@ -65,42 +66,43 @@ export default function CreatePostPage() {
       gap={1}
     >
       <Typography variant="h6">Create a Post</Typography>
-      {error && <ErrorAlert message={error} />}
+      <TagSelect/>
       <Controller
         name="title"
         control={control}
         render={({ field }) => (
           <TextField
-            fullWidth
-            placeholder="Title"
-            {...field}
-            error={!!errors.title}
-            helperText={errors.title?.message}
+          fullWidth
+          placeholder="Title"
+          {...field}
+          error={!!errors.title}
+          helperText={errors.title?.message}
           />
         )}
-      />
+        />
       <Controller
         name="content"
         control={control}
         render={({ field }) => (
           <TextField
-            fullWidth
-            placeholder="Content"
-            multiline
-            minRows={5}
-            maxRows={10}
-            {...field}
-            error={!!errors.content}
-            helperText={errors.content?.message}
+          fullWidth
+          placeholder="Content"
+          multiline
+          minRows={5}
+          maxRows={10}
+          {...field}
+          error={!!errors.content}
+          helperText={errors.content?.message}
           />
         )}
-      />
+        />
+      {error && <ErrorAlert message={error} />}
       <Button
         type="submit"
         sx={{ maxWidth: 100 }}
         variant="contained"
         disabled={isLoading}
-      >
+        >
         Post
       </Button>
     </Box>
