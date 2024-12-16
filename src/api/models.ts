@@ -8,19 +8,26 @@ export interface Post {
   title: string,
   content: string,
   authorId?: number,
-  author?: User
+  author?: User,
+  topics: Topic[]
 }
 
 export interface NewPost {
   title: string,
   content: string,
-  authorId: number
+  authorId: number,
+  topicIds: number[]
 }
 
 export interface PostUpdate {
   id: number,
   title: string,
   content: string
+}
+
+export interface PostTagsUpdate {
+  postId: number,
+  topicIds: number[]
 }
 
 export interface Comment {
@@ -41,4 +48,9 @@ export interface CommentUpdate {
   id: number
   postId: number,
   content: string
+}
+
+export interface Topic {
+  id: number
+  name: string
 }

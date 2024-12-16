@@ -5,14 +5,16 @@ import {
   NewComment,
   NewPost,
   Post,
+  PostTagsUpdate,
   PostUpdate,
+  Topic,
 } from "./models";
 import { snakeCase } from "change-case/keys";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
-  tagTypes: ["posts", "comments"],
+  tagTypes: ["posts", "comments", "topics"],
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
       query: () => "/posts",
@@ -43,7 +45,7 @@ export const apiSlice = createApi({
         url: `/posts/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_res, _err, id) => ['posts', { type: "posts", id }],
+      invalidatesTags: ["posts"],
     }),
     getPostComments: builder.query<Comment[], string>({
       query: (postId) => `/posts/${postId}/comments`,
@@ -72,7 +74,21 @@ export const apiSlice = createApi({
         url: `/comments/${comment.id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_res, _err, {postId}) => [{ type: "comments", id: postId }],
+      invalidatesTags: (_res, _err, { postId }) => [
+        { type: "comments", id: postId },
+      ],
+    }),
+    getTopics: builder.query<Topic[], void>({
+      query: () => "/topics",
+      providesTags: ["topics"],
+    }),
+    updatePostTags: builder.mutation<void, PostTagsUpdate>({
+      query: (data) => ({
+        url: `/posts/${data.postId}/topics`,
+        method: "PUT",
+        body: { topic_ids: data.topicIds },
+      }),
+      invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
     }),
   }),
 });
@@ -80,10 +96,12 @@ export const apiSlice = createApi({
 export const {
   useGetPostsQuery,
   useGetPostQuery,
+  useGetPostCommentsQuery,
+  useGetTopicsQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
+  useUpdatePostTagsMutation,
   useDeletePostMutation,
-  useGetPostCommentsQuery,
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,

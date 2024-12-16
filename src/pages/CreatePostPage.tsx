@@ -38,6 +38,7 @@ export default function CreatePostPage() {
       const newPost = await createPost({
         ...data,
         authorId: userId!,
+        topicIds: []
       }).unwrap();
 
       // Redirect to the newly-created post page
