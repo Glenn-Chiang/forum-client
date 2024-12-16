@@ -2,8 +2,14 @@ import { Divider, Link, ListItem, ListItemText } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import { Comment } from "../api/models";
 import CommentActionMenu from "./CommentActionMenu";
+import { useAppSelector } from "../store";
+import { selectCurrentUserId } from "../auth/authSlice";
 
 export default function CommentItem({ comment }: { comment: Comment }) {
+  // Check if the current user is the comment author
+  const userId = useAppSelector(selectCurrentUserId);
+  const authorized = userId === comment.authorId;
+
   return (
     <>
       <ListItem
@@ -22,7 +28,7 @@ export default function CommentItem({ comment }: { comment: Comment }) {
           }
           secondary={comment.content}
         />
-        <CommentActionMenu comment={comment} />
+        {authorized && <CommentActionMenu comment={comment} />}
       </ListItem>
       <Divider variant="middle" component={"li"} />
     </>
