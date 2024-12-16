@@ -11,8 +11,8 @@ import {
 import { Topic } from "../api/models";
 
 interface TagSelectProps {
-  selectedTags: number[],
-  setSelectedTags: (tagIds: number[]) => void
+  selectedTags: string[],
+  setSelectedTags: (tagIds: string[]) => void
 }
 
 export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProps) {
@@ -20,6 +20,7 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
     { id: 1, name: "Philosophy" },
     { id: 2, name: "Literature" },
   ];
+  // TODO: Fetch topics
   // const {data: topics, isLoading, isSuccess} = useGetTopicsQuery()
 
   // Update the state of selected topic IDs whenever new values are selected/unselected
@@ -28,7 +29,7 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
     // event.target.value may be returned as a string, so we explicitly split the string into an array
     const value = event.target.value;
     const selectedIds = typeof value === "string" ? value.split(",") : value;
-    setSelectedTags(selectedIds.map(id => Number(id)));
+    setSelectedTags(selectedIds);
   };
 
   // Render the Chip UI component for the given tag
@@ -38,13 +39,13 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
   }
 
   return (
-    <FormControl>
+    <FormControl fullWidth sx={{mt: 1}}>
       <InputLabel>Tags</InputLabel>
       <Select
         multiple
-        value={selectedTags.map(id => id.toString())}
+        value={selectedTags}
         onChange={handleChange}
-        input={<OutlinedInput label={"Tags"} />}
+        input={<OutlinedInput label={"Tags"}/>}
         MenuProps={{
           PaperProps: {
             style: {
@@ -59,7 +60,7 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
         )}
       >
         {topics.map((topic) => (
-          <MenuItem key={topic.id} value={topic.id}>
+          <MenuItem key={topic.id} value={topic.id.toString()}>
             {topic.name}
           </MenuItem>
         ))}

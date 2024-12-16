@@ -17,7 +17,7 @@ export default function CreatePostPage() {
   const userId = useAppSelector(selectCurrentUserId);
 
   // Keep track of currently selected tags
-  const [selectedTags, setSelectedTags] = useState<number[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
 
   // Redux mutation function
   const [createPost, { isLoading }] = useCreatePostMutation();
@@ -42,7 +42,7 @@ export default function CreatePostPage() {
       const newPost = await createPost({
         ...data,
         authorId: userId!,
-        topicIds: selectedTags
+        topicIds: selectedTags.map(tagId => Number(tagId))
       }).unwrap();
 
       // Redirect to the newly-created post page
