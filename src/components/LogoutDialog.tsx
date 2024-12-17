@@ -11,6 +11,7 @@ export default function LogoutDialog({
   triggerButton,
   handleCancel,
 }: LogoutDialogProps) {
+  // TODO: Logout
   const handleLogout = () => {};
 
   return (
