@@ -1,7 +1,15 @@
-import { IconButton, Menu, MenuItem, Link } from "@mui/material";
+import {
+  IconButton,
+  Menu,
+  MenuItem,
+  Link,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router";
+import { Add } from "@mui/icons-material";
 
 export default function NavMenu() {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
@@ -30,7 +38,12 @@ export default function NavMenu() {
           to={"/posts/create"}
           style={{ color: "inherit", textDecoration: "none" }}
         >
-          <MenuItem onClick={handleClose}>Create post</MenuItem>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
+            <ListItemText>Create post</ListItemText>
+          </MenuItem>
         </Link>
         <MenuItem onClick={handleClose}>Profile</MenuItem>
       </Menu>
