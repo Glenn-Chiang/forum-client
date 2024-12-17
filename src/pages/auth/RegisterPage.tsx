@@ -15,8 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "../../components/feedback/ToastProvider";
 import { useState } from "react";
 import ErrorAlert from "../../components/feedback/ErrorAlert";
+import { useCreateUserMutation } from "../../api/apiSlice";
 
 export default function RegisterPage() {
+  const [createUser, {isLoading}] = useCreateUserMutation()
+
   const {
     handleSubmit,
     control,
@@ -33,12 +36,12 @@ export default function RegisterPage() {
   // Global toast hook
   const toast = useToast();
 
-  const onSubmit: SubmitHandler<AuthFormSchema> = (data) => {
+  const onSubmit: SubmitHandler<AuthFormSchema> = async (data) => {
     try {
-      
+      await createUser(data).unwrap()
       // On successful registration, redirect to login and display toast
-      // navigate("/login")
-      // toast.display("Signed up!", 'success')
+      navigate("/login")
+      toast.display("Signed up!", 'success')
     } catch (err) {
       reset(); // Clear fields
       setError("Error signing up"); // TODO: Display more specific error message from server
@@ -93,7 +96,7 @@ export default function RegisterPage() {
 
         {error && <ErrorAlert message={error} />}
 
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" disabled={isLoading}>
           Sign up
         </Button>
         <Divider />
