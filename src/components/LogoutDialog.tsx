@@ -1,6 +1,10 @@
 import { ReactElement } from "react";
 import AlertDialog from "./AlertDialog";
 import { ButtonBaseProps } from "@mui/material";
+import { useAppDispatch } from "../store";
+import { logout } from "../auth/authSlice";
+import { useNavigate } from "react-router";
+import { useToast } from "./feedback/ToastProvider";
 
 interface LogoutDialogProps {
   triggerButton: ReactElement<ButtonBaseProps>;
@@ -11,8 +15,20 @@ export default function LogoutDialog({
   triggerButton,
   handleCancel,
 }: LogoutDialogProps) {
-  // TODO: Logout
-  const handleLogout = () => {};
+  // Redux action dispatch hook
+  const dispatch = useAppDispatch();
+  
+  // Navigation hook
+  const navigate = useNavigate()
+  
+  // Global toast hook
+  const toast = useToast()
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/')
+    toast.display("Logged out", 'info')
+  };
 
   return (
     <AlertDialog
