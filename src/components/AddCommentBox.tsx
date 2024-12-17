@@ -37,7 +37,7 @@ export default function AddCommentBox({ postId }: { postId: number }) {
   const onSubmit: SubmitHandler<CommentFormSchema> = async (data) => {
     try {
       await createComment({ ...data, postId, authorId: userId! }).unwrap();
-
+      // Clear the text field
       reset();
 
       // Display toast to alert the user that the comment was successfully posted

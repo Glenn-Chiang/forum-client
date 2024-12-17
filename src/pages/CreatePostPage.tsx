@@ -72,6 +72,7 @@ export default function CreatePostPage() {
       <TagSelect selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
       <Controller
         name="title"
+        defaultValue=""
         control={control}
         render={({ field }) => (
           <TextField
@@ -85,6 +86,7 @@ export default function CreatePostPage() {
         />
       <Controller
         name="content"
+        defaultValue=""
         control={control}
         render={({ field }) => (
           <TextField

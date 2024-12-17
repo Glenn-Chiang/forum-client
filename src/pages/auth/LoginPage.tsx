@@ -51,7 +51,6 @@ export default function LoginPage() {
       navigate("/");
       toast.display("Signed in", "success");
     } catch (err) {
-      reset(); // Clear fields
       setError("Error signing in"); // TODO: Display specific error message from server
     }
   };
@@ -73,6 +72,7 @@ export default function LoginPage() {
           <FormLabel htmlFor="username">Username</FormLabel>
           <Controller
             name="username"
+            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
@@ -88,6 +88,7 @@ export default function LoginPage() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Controller
             name="password"
+            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
