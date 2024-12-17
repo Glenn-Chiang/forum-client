@@ -41,7 +41,7 @@ export default function RegisterPage() {
       await createUser(data).unwrap()
       // On successful registration, redirect to login and display toast
       navigate("/login")
-      toast.display("Signed up!", 'success')
+      toast.display("Signed up", 'success')
     } catch (err) {
       reset(); // Clear fields
       setError("Error signing up"); // TODO: Display more specific error message from server

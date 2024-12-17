@@ -13,7 +13,7 @@ import {
   Topic,
   User,
 } from "./models";
-import { AuthToken } from "../auth/AuthToken";
+import { AuthPayload } from "../auth/AuthPayload";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -119,7 +119,7 @@ export const apiSlice = createApi({
       }),
     }),
 
-    login: builder.mutation<AuthToken, NewUser>({
+    login: builder.mutation<AuthPayload, NewUser>({
       query: (data) => ({
         url: "/login",
         method: "POST",
