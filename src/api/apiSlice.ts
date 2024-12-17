@@ -6,11 +6,14 @@ import {
   CommentUpdate,
   NewComment,
   NewPost,
+  NewUser,
   Post,
   PostTagsUpdate,
   PostUpdate,
   Topic,
+  User,
 } from "./models";
+import { AuthToken } from "../auth/AuthToken";
 
 export const apiSlice = createApi({
   reducerPath: "api",
@@ -26,6 +29,17 @@ export const apiSlice = createApi({
       providesTags: (_res, _err, id) => [{ type: "posts", id }],
       transformResponse: (res, _meta, _arg) => camelCase(res) as Post, // Transform json from snake_case to camelCase
     }),
+    getPostComments: builder.query<Comment[], string>({
+      query: (postId) => `/posts/${postId}/comments`,
+      providesTags: (_res, _err, postId) => [{ type: "comments", id: postId }],
+      transformResponse: (res: Comment[], _meta, _arg) =>
+        res.map((comment) => camelCase(comment)) as Comment[], // Transform json from snake_case to camelCase
+    }),
+    getTopics: builder.query<Topic[], void>({
+      query: () => "/topics",
+      providesTags: ["topics"],
+    }),
+
     createPost: builder.mutation<Post, NewPost>({
       query: (post) => ({
         url: "/posts",
@@ -52,12 +66,7 @@ export const apiSlice = createApi({
       // When post is deleted, refetch the list of all posts
       invalidatesTags: ["posts"],
     }),
-    getPostComments: builder.query<Comment[], string>({
-      query: (postId) => `/posts/${postId}/comments`,
-      providesTags: (_res, _err, postId) => [{ type: "comments", id: postId }],
-      transformResponse: (res: Comment[], _meta, _arg) =>
-        res.map((comment) => camelCase(comment)) as Comment[], // Transform json from snake_case to camelCase
-    }),
+
     createComment: builder.mutation<Comment, NewComment>({
       query: (comment) => ({
         url: "/comments",
@@ -86,14 +95,12 @@ export const apiSlice = createApi({
         method: "DELETE",
       }),
       // When comment is deleted, refetch all comments for the post
-      invalidatesTags: (_res, _err, { postId }) => [ //
+      invalidatesTags: (_res, _err, { postId }) => [
+        //
         { type: "comments", id: postId },
       ],
     }),
-    getTopics: builder.query<Topic[], void>({
-      query: () => "/topics",
-      providesTags: ["topics"],
-    }),
+
     updatePostTags: builder.mutation<void, PostTagsUpdate>({
       query: (data) => ({
         url: `/posts/${data.postId}/topics`,
@@ -103,6 +110,22 @@ export const apiSlice = createApi({
       // When post tags are updated, refetch the post
       invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
     }),
+
+    createUser: builder.mutation<User, NewUser>({
+      query: (data) => ({
+        url: "/users",
+        method: "POST",
+        body: data
+      }),
+    }),
+
+    login: builder.mutation<AuthToken, NewUser>({
+      query: (data) => ({
+        url: "/login",
+        method: "POST",
+        body: data
+      })
+    })
   }),
 });
 
@@ -118,4 +141,6 @@ export const {
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useCreateUserMutation,
+  useLoginMutation
 } = apiSlice;

@@ -62,3 +62,5 @@ export const authFormSchema = z.object({
       `Password must be at least ${PASSWORD_MAX_LENGTH} characters`
     ),
 });
+
+export type AuthFormSchema = z.infer<typeof authFormSchema>
