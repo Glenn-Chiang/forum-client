@@ -1,9 +1,10 @@
 import { AccountCircle } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem, Link } from "@mui/material";
+import { IconButton, Link, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router";
-import { useAppSelector } from "../store";
 import { selectCurrentUserId } from "../auth/authSlice";
+import { useAppSelector } from "../store";
+import LogoutDialog from "./LogoutDialog";
 
 export default function AccountMenu() {
   const userId = useAppSelector(selectCurrentUserId);
@@ -32,7 +33,10 @@ export default function AccountMenu() {
         >
           <MenuItem>Profile</MenuItem>
         </Link>
-        <MenuItem>Logout</MenuItem>
+        <LogoutDialog
+          triggerButton={<MenuItem>Logout</MenuItem>}
+          handleCancel={handleClose}
+        />
       </Menu>
     </>
   );
