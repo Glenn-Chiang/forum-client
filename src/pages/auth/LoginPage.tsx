@@ -13,22 +13,22 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link as RouterLink, useNavigate } from "react-router";
 import { useLoginMutation } from "../../api/apiSlice";
+import { setCredentials } from "../../auth/authSlice";
 import ErrorAlert from "../../components/feedback/ErrorAlert";
 import { useToast } from "../../components/feedback/ToastProvider";
 import { authFormSchema, AuthFormSchema } from "../../form_schemas.ts/schemas";
 import { useAppDispatch } from "../../store";
-import { setCredentials } from "../../auth/authSlice";
+import { isFetchBaseQueryError, parseApiError } from "../../api/errors";
 
 export default function LoginPage() {
   // Redux mutation hook for login request
   const [login, { isLoading }] = useLoginMutation();
   // Redux action dispatcher
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<AuthFormSchema>({ resolver: zodResolver(authFormSchema) });
 
@@ -45,13 +45,18 @@ export default function LoginPage() {
     try {
       const authPayload = await login(data).unwrap();
       // Store the logged in user and token in redux state
-      dispatch(setCredentials(authPayload))
+      dispatch(setCredentials(authPayload));
 
       // On successful login, redirect to home and display toast
       navigate("/");
       toast.display("Signed in", "success");
     } catch (err) {
-      setError("Error signing in"); // TODO: Display specific error message from server
+      console.log(err);
+      if (isFetchBaseQueryError(err)) {
+        setError(parseApiError(err));
+      } else {
+        setError("Error signing in");
+      }
     }
   };
 
