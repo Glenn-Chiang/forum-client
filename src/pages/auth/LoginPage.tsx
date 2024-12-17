@@ -44,7 +44,7 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<AuthFormSchema> = async (data) => {
     try {
       const authPayload = await login(data).unwrap();
-      // Store the logged in user in redux state
+      // Store the logged in user and token in redux state
       dispatch(setCredentials(authPayload))
 
       // On successful login, redirect to home and display toast

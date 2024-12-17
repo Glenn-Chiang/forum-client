@@ -17,7 +17,16 @@ import { AuthPayload } from "../auth/AuthPayload";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080",
+    prepareHeaders: (headers) => {
+      // Retrieve token from localStorage and set Authorization header using Bearer scheme
+      const token = localStorage.getItem("token")
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+      }
+      return headers
+    }
+   }),
   tagTypes: ["posts", "comments", "topics"],
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
