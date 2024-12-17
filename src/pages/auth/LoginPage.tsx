@@ -18,7 +18,7 @@ import ErrorAlert from "../../components/feedback/ErrorAlert";
 import { useToast } from "../../components/feedback/ToastProvider";
 import { authFormSchema, AuthFormSchema } from "../../form_schemas.ts/schemas";
 import { useAppDispatch } from "../../store";
-import { isFetchBaseQueryError, parseApiError } from "../../api/errors";
+import { isApiError, parseApiError } from "../../api/errors";
 
 export default function LoginPage() {
   // Redux mutation hook for login request
@@ -51,8 +51,7 @@ export default function LoginPage() {
       navigate("/");
       toast.display("Signed in", "success");
     } catch (err) {
-      console.log(err);
-      if (isFetchBaseQueryError(err)) {
+      if (isApiError(err)) {
         setError(parseApiError(err));
       } else {
         setError("Error signing in");

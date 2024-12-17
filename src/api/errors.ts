@@ -1,7 +1,7 @@
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 // Check if the error is from RTK query, i.e. due to API fetching/mutation
-export function isFetchBaseQueryError(
+export function isApiError(
   error: unknown
 ): error is FetchBaseQueryError {
   return typeof error === "object" && error != null && "status" in error;

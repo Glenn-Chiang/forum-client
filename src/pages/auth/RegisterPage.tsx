@@ -16,14 +16,14 @@ import { useToast } from "../../components/feedback/ToastProvider";
 import { useState } from "react";
 import ErrorAlert from "../../components/feedback/ErrorAlert";
 import { useCreateUserMutation } from "../../api/apiSlice";
+import { isApiError, parseApiError } from "../../api/errors";
 
 export default function RegisterPage() {
-  const [createUser, {isLoading}] = useCreateUserMutation()
+  const [createUser, { isLoading }] = useCreateUserMutation();
 
   const {
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<AuthFormSchema>({ resolver: zodResolver(authFormSchema) });
 
@@ -38,13 +38,17 @@ export default function RegisterPage() {
 
   const onSubmit: SubmitHandler<AuthFormSchema> = async (data) => {
     try {
-      await createUser(data).unwrap()
+      await createUser(data).unwrap();
       // On successful registration, redirect to login and display toast
-      navigate("/login")
-      toast.display("Signed up", 'success')
+      navigate("/login");
+      toast.display("Signed up", "success");
     } catch (err) {
-      reset(); // Clear fields
-      setError("Error signing up"); // TODO: Display more specific error message from server
+      // Display error from API
+      if (isApiError(err)) {
+        setError(parseApiError(err));
+      } else {
+        setError("Error signing up");
+      }
     }
   };
 
@@ -65,6 +69,7 @@ export default function RegisterPage() {
           <FormLabel htmlFor="username">Username</FormLabel>
           <Controller
             name="username"
+            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
@@ -81,6 +86,7 @@ export default function RegisterPage() {
           <FormLabel htmlFor="password">Password</FormLabel>
           <Controller
             name="password"
+            defaultValue=""
             control={control}
             render={({ field }) => (
               <TextField
