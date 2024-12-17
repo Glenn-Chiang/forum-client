@@ -15,18 +15,21 @@ import {
 } from "./models";
 import { AuthPayload } from "../auth/AuthPayload";
 
+// Redux slice to handle data fetching and caching
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080", // API domain
     prepareHeaders: (headers) => {
       // Retrieve token from localStorage and set Authorization header using Bearer scheme
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`)
+        headers.set("Authorization", `Bearer ${token}`);
       }
-      return headers
-    }
-   }),
+      return headers;
+    },
+  }),
+  // Cache tags for automatic invalidation
   tagTypes: ["posts", "comments", "topics"],
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
@@ -124,7 +127,7 @@ export const apiSlice = createApi({
       query: (data) => ({
         url: "/users",
         method: "POST",
-        body: data
+        body: data,
       }),
     }),
 
@@ -132,9 +135,9 @@ export const apiSlice = createApi({
       query: (data) => ({
         url: "/login",
         method: "POST",
-        body: data
-      })
-    })
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -151,5 +154,5 @@ export const {
   useUpdateCommentMutation,
   useDeleteCommentMutation,
   useCreateUserMutation,
-  useLoginMutation
+  useLoginMutation,
 } = apiSlice;
