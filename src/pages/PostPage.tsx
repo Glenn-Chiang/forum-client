@@ -1,6 +1,7 @@
 import { useParams } from "react-router";
 import { useGetPostQuery } from "../api/apiSlice";
 import AddCommentBox from "../components/AddCommentBox";
+import BackButton from "../components/BackButton";
 import CommentSection from "../components/CommentSection";
 import ErrorAlert from "../components/feedback/ErrorAlert";
 import LoadingSkeleton from "../components/LoadingSkeleton";
@@ -27,8 +28,9 @@ export default function PostPage() {
   if (isSuccess) {
     return (
       <section>
+        <BackButton/>
         <PostCard post={post} />
-        <AddCommentBox postId={Number(postId)}/>
+        <AddCommentBox postId={Number(postId)} />
         <CommentSection />
       </section>
     );
