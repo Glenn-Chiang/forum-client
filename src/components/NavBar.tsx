@@ -1,16 +1,15 @@
-import { AppBar, Box, Button, Link, Toolbar } from "@mui/material";
+import { AppBar, Button, Link, Toolbar } from "@mui/material";
 import { Link as RouterLink } from "react-router";
-import NavMenu from "./NavMenu";
-import { useAppSelector } from "../store";
 import { selectCurrentUserId } from "../auth/authSlice";
+import { useAppSelector } from "../store";
 import AccountMenu from "./AccountMenu";
+import NavMenu from "./NavMenu";
 
 export default function NavBar() {
   const userId = useAppSelector(selectCurrentUserId);
   const authenticated = userId !== null;
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky">
         <Toolbar>
           <NavMenu />
@@ -33,6 +32,5 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-    </Box>
   );
 }
