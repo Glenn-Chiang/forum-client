@@ -13,6 +13,7 @@ import PostActionMenu from "./PostActionMenu";
 import TagList from "./TagList";
 import EditTagsDialog from "./EditTagsDialog";
 import { Sell } from "@mui/icons-material";
+import { formatDistanceToNow } from "date-fns";
 
 export default function PostCard({ post }: { post: Post }) {
   // Check if the current user is the post author
@@ -22,7 +23,14 @@ export default function PostCard({ post }: { post: Post }) {
   return (
     <Card sx={{ position: "relative" }}>
       {authorized && <PostActionMenu postId={post.id} />}
-      <CardHeader title={post.title} subheader={post.author?.username} />
+      <CardHeader
+        title={post.title}
+        subheader={
+          post.author?.username +
+          ", " +
+          formatDistanceToNow(post.createdAt, { addSuffix: true })
+        }
+      />
       <Box
         paddingX={1}
         display={"flex"}
