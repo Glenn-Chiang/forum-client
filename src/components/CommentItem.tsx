@@ -1,9 +1,16 @@
-import { Divider, Link, ListItem, ListItemText } from "@mui/material";
+import {
+  Divider,
+  Link,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import { Comment } from "../api/models";
 import CommentActionMenu from "./CommentActionMenu";
 import { useAppSelector } from "../store";
 import { selectCurrentUserId } from "../auth/authSlice";
+import { formatDistanceToNow } from "date-fns";
 
 export default function CommentItem({ comment }: { comment: Comment }) {
   // Check if the current user is the comment author
@@ -13,8 +20,13 @@ export default function CommentItem({ comment }: { comment: Comment }) {
   return (
     <>
       <ListItem
-        sx={{ width: "100%", position: "relative" }}
-        alignItems="flex-start"
+        sx={{
+          width: "100%",
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+        }}
       >
         <ListItemText
           primary={
@@ -26,9 +38,12 @@ export default function CommentItem({ comment }: { comment: Comment }) {
               {comment.author.username}
             </Link>
           }
-          secondary={comment.content}
+          secondary={formatDistanceToNow(comment.createdAt, {
+            addSuffix: true,
+          })}
         />
         {authorized && <CommentActionMenu comment={comment} />}
+        <Typography>{comment.content}</Typography>
       </ListItem>
       <Divider variant="middle" component={"li"} />
     </>
