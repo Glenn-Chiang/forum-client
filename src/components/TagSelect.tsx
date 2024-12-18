@@ -1,6 +1,7 @@
 import {
   Box,
   Chip,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -8,20 +9,19 @@ import {
   Select,
   SelectChangeEvent,
 } from "@mui/material";
-import { Topic } from "../api/models";
+import { useGetTopicsQuery } from "../api/apiSlice";
+import ErrorAlert from "./feedback/ErrorAlert";
 
 interface TagSelectProps {
-  selectedTags: string[],
-  setSelectedTags: (tagIds: string[]) => void
+  selectedTags: string[];
+  setSelectedTags: (tagIds: string[]) => void;
 }
 
-export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProps) {
-  const topics: Topic[] = [
-    { id: 1, name: "Philosophy" },
-    { id: 2, name: "Literature" },
-  ];
-  // TODO: Fetch topics
-  // const {data: topics, isLoading, isSuccess} = useGetTopicsQuery()
+export default function TagSelect({
+  selectedTags,
+  setSelectedTags,
+}: TagSelectProps) {
+  const { data: topics, isLoading, isSuccess } = useGetTopicsQuery();
 
   // Update the state of selected topic IDs whenever new values are selected/unselected
   const handleChange = (event: SelectChangeEvent<string[]>) => {
@@ -32,20 +32,21 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
     setSelectedTags(selectedIds);
   };
 
-  // Render the Chip UI component for the given tag
+  // Render the Chip UI component to display the selected tag
   const renderChip = (tagId: string) => {
-    const topic = topics.find(topic => topic.id === Number(tagId))!
-    return <Chip key={tagId} label={topic.name} />
-  }
+    if (!isSuccess) return <></>;
+    const topic = topics.find((topic) => topic.id === Number(tagId))!;
+    return <Chip key={tagId} label={topic.name} />;
+  };
 
   return (
-    <FormControl fullWidth sx={{mt: 1}}>
+    <FormControl fullWidth sx={{ mt: 1 }}>
       <InputLabel>Tags</InputLabel>
       <Select
         multiple
         value={selectedTags}
         onChange={handleChange}
-        input={<OutlinedInput label={"Tags"}/>}
+        input={<OutlinedInput label={"Tags"} />}
         MenuProps={{
           PaperProps: {
             style: {
@@ -53,17 +54,25 @@ export default function TagSelect({selectedTags, setSelectedTags}: TagSelectProp
             },
           },
         }}
-        renderValue={(selected) => (
+        renderValue={(selectedTags) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            {selected.map(renderChip)}
+            {selectedTags.map(renderChip)}
           </Box>
         )}
       >
-        {topics.map((topic) => (
-          <MenuItem key={topic.id} value={topic.id.toString()}>
-            {topic.name}
-          </MenuItem>
-        ))}
+        {isLoading ? (
+          <Box display={"flex"}>
+            <CircularProgress />
+          </Box>
+        ) : !isSuccess ? (
+          <ErrorAlert message="Error fetching topics" />
+        ) : (
+          topics.map((topic) => (
+            <MenuItem key={topic.id} value={topic.id.toString()}>
+              {topic.name}
+            </MenuItem>
+          ))
+        )}
       </Select>
     </FormControl>
   );

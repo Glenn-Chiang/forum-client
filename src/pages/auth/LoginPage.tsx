@@ -51,6 +51,7 @@ export default function LoginPage() {
       navigate("/");
       toast.display("Signed in", "success");
     } catch (err) {
+      // Display specififc error from API
       if (isApiError(err)) {
         setError(parseApiError(err));
       } else {
