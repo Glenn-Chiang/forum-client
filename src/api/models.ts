@@ -12,9 +12,11 @@ export interface Post {
   id: number,
   title: string,
   content: string,
-  authorId?: number,
+  authorId: number,
   author?: User,
-  topics: Topic[]
+  topics: Topic[],
+  createdAt: Date,
+  updatedAt: Date
 }
 
 export interface NewPost {
@@ -40,7 +42,9 @@ export interface Comment {
   content: string,
   postId: number,
   authorId: number,
-  author: User
+  author: User,
+  createdAt: Date,
+  updatedAt: Date
 }
 
 export interface NewComment {

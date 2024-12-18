@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CommentFormSchema,
   commentFormSchema,
-} from "../form_schemas.ts/schemas";
+} from "../api/form_schemas";
 import { useToast } from "./feedback/ToastProvider";
 
 interface EditCommentDialogProps {

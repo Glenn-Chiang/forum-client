@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { snakeCase, camelCase } from "change-case/keys";
 
+import { AuthPayload } from "../auth/AuthPayload";
 import {
   Comment,
   CommentUpdate,
@@ -13,7 +13,8 @@ import {
   Topic,
   User,
 } from "./models";
-import { AuthPayload } from "../auth/AuthPayload";
+import { parseComments, parsePost, parsePosts, parseTopics } from "./response_schemas";
+import { serializeRequestBody } from "./serialization";
 
 // Redux slice to handle data fetching and caching
 export const apiSlice = createApi({
@@ -35,28 +36,29 @@ export const apiSlice = createApi({
     getPosts: builder.query<Post[], void>({
       query: () => "/posts",
       providesTags: ["posts"],
+      transformResponse: parsePosts
     }),
     getPost: builder.query<Post, string>({
       query: (id) => `/posts/${id}`,
       providesTags: (_res, _err, id) => [{ type: "posts", id }],
-      transformResponse: (res, _meta, _arg) => camelCase(res) as Post, // Transform json from snake_case to camelCase
+      transformResponse: parsePost
     }),
     getPostComments: builder.query<Comment[], string>({
       query: (postId) => `/posts/${postId}/comments`,
       providesTags: (_res, _err, postId) => [{ type: "comments", id: postId }],
-      transformResponse: (res: Comment[], _meta, _arg) =>
-        res.map((comment) => camelCase(comment)) as Comment[], // Transform json from snake_case to camelCase
+      transformResponse: parseComments
     }),
     getTopics: builder.query<Topic[], void>({
       query: () => "/topics",
       providesTags: ["topics"],
+      transformResponse: parseTopics
     }),
 
     createPost: builder.mutation<Post, NewPost>({
       query: (post) => ({
         url: "/posts",
         method: "POST",
-        body: snakeCase(post),
+        body: serializeRequestBody(post),
       }),
       // When post is created, refetch the list of all posts
       invalidatesTags: ["posts"],
@@ -83,7 +85,7 @@ export const apiSlice = createApi({
       query: (comment) => ({
         url: "/comments",
         method: "POST",
-        body: snakeCase(comment),
+        body: serializeRequestBody(comment),
       }),
       // When new comment is created, refetch all comments for the post
       invalidatesTags: (_res, _err, { postId }) => [
@@ -127,7 +129,7 @@ export const apiSlice = createApi({
       query: (data) => ({
         url: "/users",
         method: "POST",
-        body: data,
+        body: serializeRequestBody(data),
       }),
     }),
 

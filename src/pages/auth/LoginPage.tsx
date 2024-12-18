@@ -16,7 +16,7 @@ import { useLoginMutation } from "../../api/apiSlice";
 import { setCredentials } from "../../auth/authSlice";
 import ErrorAlert from "../../components/feedback/ErrorAlert";
 import { useToast } from "../../components/feedback/ToastProvider";
-import { authFormSchema, AuthFormSchema } from "../../form_schemas.ts/schemas";
+import { authFormSchema, AuthFormSchema } from "../../api/form_schemas";
 import { useAppDispatch } from "../../store";
 import { isApiError, parseApiError } from "../../api/errors";
 

@@ -7,7 +7,7 @@ import { selectCurrentUserId } from "../auth/authSlice";
 import {
   CommentFormSchema,
   commentFormSchema,
-} from "../form_schemas.ts/schemas";
+} from "../api/form_schemas";
 import { useAppSelector } from "../store";
 import ErrorAlert from "./feedback/ErrorAlert";
 import { useToast } from "./feedback/ToastProvider";

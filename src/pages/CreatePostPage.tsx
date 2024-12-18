@@ -5,7 +5,7 @@ import { selectCurrentUserId } from "../auth/authSlice";
 import InfoAlert from "../components/feedback/InfoAlert";
 import { useAppSelector } from "../store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { postFormSchema, PostFormSchema } from "../form_schemas.ts/schemas";
+import { postFormSchema, PostFormSchema } from "../api/form_schemas";
 import { useState } from "react";
 import ErrorAlert from "../components/feedback/ErrorAlert";
 import { useNavigate } from "react-router";

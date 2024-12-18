@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Link as RouterLink, useNavigate } from "react-router";
-import { authFormSchema, AuthFormSchema } from "../../form_schemas.ts/schemas";
+import { authFormSchema, AuthFormSchema } from "../../api/form_schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "../../components/feedback/ToastProvider";
 import { useState } from "react";

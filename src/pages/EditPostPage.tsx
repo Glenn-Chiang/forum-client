@@ -4,7 +4,7 @@ import { useGetPostQuery, useUpdatePostMutation } from "../api/apiSlice";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import ErrorAlert from "../components/feedback/ErrorAlert";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { postFormSchema, PostFormSchema } from "../form_schemas.ts/schemas";
+import { postFormSchema, PostFormSchema } from "../api/form_schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useToast } from "../components/feedback/ToastProvider";
