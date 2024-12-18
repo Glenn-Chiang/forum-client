@@ -1,4 +1,11 @@
-import { Divider, Link, ListItem, ListItemText } from "@mui/material";
+import {
+  Divider,
+  Link,
+  ListItem,
+  ListItemText,
+  Typography
+} from "@mui/material";
+import { formatDistanceToNow } from "date-fns";
 import { Link as RouterLink } from "react-router";
 import { Post } from "../api/models";
 
@@ -6,10 +13,18 @@ import { Post } from "../api/models";
 export default function PostItem({ post }: { post: Post }) {
   return (
     <>
-      <ListItem sx={{ width: "100%" }} alignItems="flex-start">
+      <ListItem
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "start",
+        }}
+      >
         <ListItemText
           primary={
             <Link
+              variant="h6"
               component={RouterLink}
               to={`/posts/${post.id}`}
               underline="hover"
@@ -17,8 +32,11 @@ export default function PostItem({ post }: { post: Post }) {
               {post.title}
             </Link>
           }
-          secondary={post.content}
+          secondary={formatDistanceToNow(post.createdAt, { addSuffix: true })}
         />
+        <Typography color="textSecondary" >
+          {post.content}
+        </Typography>
       </ListItem>
       <Divider variant="middle" component={"li"} />
     </>

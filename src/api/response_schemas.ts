@@ -9,9 +9,6 @@ const camelize = <T extends Record<string, unknown>>(
   val: T
 ): CamelCasedPropertiesDeep<T> => camelCase(val) as CamelCasedPropertiesDeep<T>;
 
-// JSON represents datetime fields as ISO strings, so we convert them to javascript Date objects
-const timeSchema = z.string().transform((val) => new Date(val));
-
 const userSchema = z
   .object({
     id: z.number(),
@@ -34,8 +31,8 @@ const postSchema = z
     author_id: z.number(),
     author: userSchema.optional(),
     topics: z.array(topicSchema),
-    created_at: timeSchema,
-    updated_at: timeSchema,
+    created_at: z.string(),
+    updated_at: z.string(),
   })
   .transform(camelize);
 
@@ -46,8 +43,8 @@ const commentSchema = z
     post_id: z.number(),
     author_id: z.number(),
     author: userSchema,
-    created_at: timeSchema,
-    updated_at: timeSchema,
+    created_at: z.string(),
+    updated_at: z.string(),
   })
   .transform(camelize);
 

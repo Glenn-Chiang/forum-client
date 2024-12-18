@@ -15,8 +15,8 @@ export interface Post {
   authorId: number,
   author?: User,
   topics: Topic[],
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: string,
+  updatedAt: string
 }
 
 export interface NewPost {
@@ -43,8 +43,8 @@ export interface Comment {
   postId: number,
   authorId: number,
   author: User,
-  createdAt: Date,
-  updatedAt: Date
+  createdAt: string,
+  updatedAt: string
 }
 
 export interface NewComment {
