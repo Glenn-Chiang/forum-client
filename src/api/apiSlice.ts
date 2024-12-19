@@ -13,8 +13,25 @@ import {
   Topic,
   User,
 } from "./models";
-import { parseComments, parsePost, parsePosts, parseTopics } from "./response_schemas";
+import {
+  parseComments,
+  parsePost,
+  parsePosts,
+  parseTopics,
+} from "./response_schemas";
 import { serializeRequestBody } from "./serialization";
+
+interface getPostsQueryArgs {
+  page?: number;
+  sortBy?: string;
+  topicId?: string;
+}
+
+interface getPostCommentsQueryArgs {
+  postId: number;
+  page?: number;
+  sortBy?: string;
+}
 
 // Redux slice to handle data fetching and caching
 export const apiSlice = createApi({
@@ -33,26 +50,38 @@ export const apiSlice = createApi({
   // Cache tags for automatic invalidation
   tagTypes: ["posts", "comments", "topics"],
   endpoints: (builder) => ({
-    getPosts: builder.query<Post[], void>({
-      query: () => "/posts",
+    // Queries
+
+    getPosts: builder.query<Post[], getPostsQueryArgs>({
+      query: ({ page = 1, sortBy, topicId }) =>
+        `/posts?page=${page}${sortBy ? `&sort_by=${sortBy}` : ""}${
+          topicId ? `&topic_id=${topicId}` : ""
+        }`,
       providesTags: ["posts"],
-      transformResponse: parsePosts
+      transformResponse: parsePosts,
     }),
-    getPost: builder.query<Post, string>({
-      query: (id) => `/posts/${id}`,
-      providesTags: (_res, _err, id) => [{ type: "posts", id }],
-      transformResponse: parsePost
-    }),
-    getPostComments: builder.query<Comment[], string>({
-      query: (postId) => `/posts/${postId}/comments`,
-      providesTags: (_res, _err, postId) => [{ type: "comments", id: postId }],
-      transformResponse: parseComments
+    getPostComments: builder.query<Comment[], getPostCommentsQueryArgs>({
+      query: ({ postId, page = 1, sortBy }) =>
+        `/posts/${postId}/comments?page=${page}${
+          sortBy ? `&sort_by=${sortBy}` : ""
+        }`,
+      providesTags: (_res, _err, { postId }) => [
+        { type: "comments", id: postId },
+      ],
+      transformResponse: parseComments,
     }),
     getTopics: builder.query<Topic[], void>({
       query: () => "/topics",
       providesTags: ["topics"],
-      transformResponse: parseTopics
+      transformResponse: parseTopics,
     }),
+    getPost: builder.query<Post, string>({
+      query: (id) => `/posts/${id}`,
+      providesTags: (_res, _err, id) => [{ type: "posts", id }],
+      transformResponse: parsePost,
+    }),
+
+    // Mutations
 
     createPost: builder.mutation<Post, NewPost>({
       query: (post) => ({
