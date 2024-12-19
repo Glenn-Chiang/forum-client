@@ -1,5 +1,5 @@
 import { Add } from "@mui/icons-material";
-import { AppBar, Button, Link, Stack, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, Link, Stack, Toolbar } from "@mui/material";
 import { Link as RouterLink } from "react-router";
 import { selectCurrentUserId } from "../auth/authSlice";
 import { useAppSelector } from "../store";
@@ -18,10 +18,11 @@ export default function NavBar() {
           variant="h6"
           color="inherit"
           underline="none"
-          sx={{ flexGrow: 1 }}
+          padding={1}
         >
           Forum
         </Link>
+        <Box flexGrow={1}></Box>
         {authenticated ? (
           <Stack direction={"row"} spacing={2}>
             <Button
