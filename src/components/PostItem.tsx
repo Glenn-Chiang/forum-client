@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Link,
   ListItem,
@@ -8,6 +9,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 import { Link as RouterLink } from "react-router";
 import { Post } from "../api/models";
+import TagList from "./TagList";
 
 // PostItem is displayed as an item within a PostList and links to the page for that post
 export default function PostItem({ post }: { post: Post }) {
@@ -33,6 +35,10 @@ export default function PostItem({ post }: { post: Post }) {
           }
           secondary={formatDistanceToNow(post.createdAt, { addSuffix: true })}
         />
+        <Box paddingY={1}>
+          <TagList tags={post.topics} />
+        </Box>
+
         <Typography color="textSecondary">{post.content}</Typography>
       </ListItem>
       <Divider variant="middle" component={"li"} />
