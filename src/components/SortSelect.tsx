@@ -12,12 +12,12 @@ export default function SortSelect() {
 
   // Get sortBy option from URL search param
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortBy = searchParams.get("sort_by") || "new";
+  const sortBy = searchParams.get("sort") || "new";
 
   // Set URL search param when option is selected
   const handleChange = (event: SelectChangeEvent) => {
     const params = new URLSearchParams();
-    params.set("sort_by", event.target.value);
+    params.set("sort", event.target.value);
     setSearchParams(params);
   };
 

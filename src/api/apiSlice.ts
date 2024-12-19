@@ -27,7 +27,7 @@ interface getPostsQueryArgs {
   page?: number;
   limit?: number;
   sortBy?: string;
-  topicId?: string;
+  tags?: number[];
 }
 
 interface getPostCommentsQueryArgs {
@@ -35,6 +35,33 @@ interface getPostCommentsQueryArgs {
   limit?: number;
   page?: number;
   sortBy?: string;
+}
+
+// Build the GET /posts url with the given query parameters
+const buildGetPostsUrl = ({ page = 1, limit = 10, sortBy, tags }: getPostsQueryArgs): string => {
+  // Set query params
+  const queryParams = new URLSearchParams()
+  queryParams.set("page", page.toString())
+  queryParams.set("limit", limit.toString())
+  queryParams.set("sort", sortBy || "new")
+
+  // Add multiple "tag" param values
+  if (tags) {
+    tags.forEach(tag => queryParams.append("tag", tag.toString()))
+  }
+
+  return `/posts?${queryParams.toString()}`
+}
+
+// Build the GET /posts/:id/comments url with the given query parameters
+const buildGetPostCommentsUrl = ({ postId, page = 1, limit = 10, sortBy}: getPostCommentsQueryArgs): string => {
+  // Set query params
+  const queryParams = new URLSearchParams()
+  queryParams.set("page", page.toString())
+  queryParams.set("limit", limit.toString())
+  queryParams.set("sort", sortBy || "new")
+
+  return `/posts/${postId}/comments?${queryParams.toString()}`
 }
 
 // Redux slice to handle data fetching and caching
@@ -57,18 +84,12 @@ export const apiSlice = createApi({
     // Queries
 
     getPosts: builder.query<PostList, getPostsQueryArgs>({
-      query: ({ page = 1, limit = 10, sortBy, topicId }) =>
-        `/posts?page=${page}&limit=${limit}${
-          sortBy ? `&sort_by=${sortBy}` : ""
-        }${topicId ? `&topic_id=${topicId}` : ""}`,
+      query: buildGetPostsUrl,
       providesTags: ["posts"],
       transformResponse: parsePosts,
     }),
     getPostComments: builder.query<CommentList, getPostCommentsQueryArgs>({
-      query: ({ postId, page = 1, limit = 10, sortBy }) =>
-        `/posts/${postId}/comments?page=${page}&limit=${limit}${
-          sortBy ? `&sort_by=${sortBy}` : ""
-        }`,
+      query: buildGetPostCommentsUrl,
       providesTags: (_res, _err, { postId }) => [
         { type: "comments", id: postId },
       ],

@@ -1,4 +1,4 @@
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Stack } from "@mui/material";
 import { useState } from "react";
 import { useGetPostsQuery } from "../api/apiSlice";
 import ErrorAlert from "../components/feedback/ErrorAlert";
@@ -7,6 +7,7 @@ import PaginationBar from "../components/PaginationBar";
 import PostList from "../components/PostList";
 import { useSearchParams } from "react-router";
 import SortSelect from "../components/SortSelect";
+import TagSelect from "../components/TagSelect";
 
 export default function Home() {
   // Pagination state
@@ -15,7 +16,10 @@ export default function Home() {
 
   // Get sorting order from search params
   const [searchParams] = useSearchParams();
-  const sortBy = searchParams.get("sort_by") || undefined;
+  const sortBy = searchParams.get("sort") || undefined;
+
+  // Tags state for filtering
+  const [tags, setTags] = useState<string[]>([])
 
   // Fetch posts
   const {
@@ -32,9 +36,10 @@ export default function Home() {
 
   return (
     <>
-      <Box padding={1}>
+      <Stack direction={"row"} spacing={1} padding={1}>
         <SortSelect />
-      </Box>
+        <TagSelect size="small" selectedTags={tags} setSelectedTags={setTags}/>
+      </Stack>
         <Divider/>
       {isLoading ? (
         <LoadingSkeleton />

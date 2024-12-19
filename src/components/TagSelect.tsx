@@ -12,11 +12,13 @@ import { useGetTopicsQuery } from "../api/apiSlice";
 import ErrorAlert from "./feedback/ErrorAlert";
 
 interface TagSelectProps {
+  size?: "small" | "medium",
   selectedTags: string[];
   setSelectedTags: (tagIds: string[]) => void;
 }
 
 export default function TagSelect({
+  size = "medium",
   selectedTags,
   setSelectedTags,
 }: TagSelectProps) {
@@ -38,7 +40,7 @@ export default function TagSelect({
   };
 
   return (
-    <FormControl fullWidth sx={{ mt: 1 }}>
+    <FormControl size={size} sx={{minWidth: 120}}>
       <InputLabel>Tags</InputLabel>
       <Select
         multiple

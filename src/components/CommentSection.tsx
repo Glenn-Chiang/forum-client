@@ -16,8 +16,8 @@ export default function CommentSection() {
 
   // Get sorting order from search params
   const [searchParams] = useSearchParams();
-  const sortBy = searchParams.get("sort_by") || undefined;
-
+  const sortBy = searchParams.get("sort") || undefined;
+  console.log(sortBy)
   const {
     data: commentList,
     isLoading,
