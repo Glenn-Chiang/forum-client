@@ -4,7 +4,7 @@ import React from "react";
 interface PaginationBarProps {
   page: number;
   setPage: (page: number) => void;
-  count: number;
+  count: number; // How many pages
 }
 
 export default function PaginationBar({
@@ -14,6 +14,7 @@ export default function PaginationBar({
 }: PaginationBarProps) {
   const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    window.scrollTo({top: 0, behavior: "auto"});
   };
 
   return (

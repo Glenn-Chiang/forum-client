@@ -5,20 +5,29 @@ import ErrorAlert from "./feedback/ErrorAlert";
 import { Box, Typography } from "@mui/material";
 import CommentList from "./CommentList";
 import { useState } from "react";
+import PaginationBar from "./PaginationBar";
 
 export default function CommentSection() {
   const { id: postId } = useParams();
 
   const [page, setPage] = useState(1);
+  const maxCommentsPerPage = 10;
 
   const {
     data: commentList,
     isLoading,
     isError,
-  } = useGetPostCommentsQuery({ postId: Number(postId)!, page });
+  } = useGetPostCommentsQuery({
+    postId: Number(postId)!,
+    page,
+    limit: maxCommentsPerPage,
+  });
 
   const comments = commentList?.data || [];
-  const commentCount = commentList?.total_count || 0;
+  const totalComments = commentList?.total_count || 0;
+
+  // Total number of pages required to display all comments
+  const numPages = Math.ceil(totalComments / maxCommentsPerPage);
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -30,9 +39,14 @@ export default function CommentSection() {
   return (
     <Box>
       {comments.length > 0 ? (
+        <>
         <CommentList comments={comments} />
+      <Box padding={1}>
+        <PaginationBar page={page} setPage={setPage} count={numPages} />
+      </Box>
+        </>
       ) : (
-        <Box padding={1}>
+        <Box padding={2}>
           <Typography color="text.secondary">No comments</Typography>
         </Box>
       )}
