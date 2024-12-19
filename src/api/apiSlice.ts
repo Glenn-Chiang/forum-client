@@ -27,7 +27,7 @@ interface getPostsQueryArgs {
   page?: number;
   limit?: number;
   sortBy?: string;
-  tags?: number[];
+  tags?: string[];
 }
 
 interface getPostCommentsQueryArgs {

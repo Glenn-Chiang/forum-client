@@ -26,7 +26,7 @@ export default function Home() {
     data: postList,
     isLoading,
     isSuccess,
-  } = useGetPostsQuery({ page, limit: maxPostsPerPage, sortBy });
+  } = useGetPostsQuery({ page, limit: maxPostsPerPage, sortBy, tags });
 
   const posts = postList?.data || [];
   const totalPosts = postList?.total_count || 0;
