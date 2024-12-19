@@ -12,11 +12,13 @@ export default function CommentSection() {
   const [page, setPage] = useState(1);
 
   const {
-    data: comments,
+    data: commentList,
     isLoading,
-    isSuccess,
     isError,
   } = useGetPostCommentsQuery({ postId: Number(postId)!, page });
+
+  const comments = commentList?.data || [];
+  const commentCount = commentList?.total_count || 0;
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -24,17 +26,16 @@ export default function CommentSection() {
   if (isError) {
     return <ErrorAlert />;
   }
-  if (isSuccess) {
-    return (
-      <Box>
-        {comments.length > 0 ? (
-          <CommentList comments={comments} />
-        ) : (
-          <Box padding={1}>
-            <Typography color="text.secondary">No comments</Typography>
-          </Box>
-        )}
-      </Box>
-    );
-  }
+
+  return (
+    <Box>
+      {comments.length > 0 ? (
+        <CommentList comments={comments} />
+      ) : (
+        <Box padding={1}>
+          <Typography color="text.secondary">No comments</Typography>
+        </Box>
+      )}
+    </Box>
+  );
 }

@@ -3,7 +3,7 @@ import {
   Link,
   ListItem,
   ListItemText,
-  Typography
+  Typography,
 } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
 import { Link as RouterLink } from "react-router";
@@ -24,7 +24,6 @@ export default function PostItem({ post }: { post: Post }) {
         <ListItemText
           primary={
             <Link
-              variant="h6"
               component={RouterLink}
               to={`/posts/${post.id}`}
               underline="hover"
@@ -34,9 +33,7 @@ export default function PostItem({ post }: { post: Post }) {
           }
           secondary={formatDistanceToNow(post.createdAt, { addSuffix: true })}
         />
-        <Typography color="textSecondary" >
-          {post.content}
-        </Typography>
+        <Typography color="textSecondary">{post.content}</Typography>
       </ListItem>
       <Divider variant="middle" component={"li"} />
     </>

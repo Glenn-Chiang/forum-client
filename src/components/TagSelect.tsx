@@ -1,13 +1,12 @@
 import {
   Box,
   Chip,
-  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
+  SelectChangeEvent
 } from "@mui/material";
 import { useGetTopicsQuery } from "../api/apiSlice";
 import ErrorAlert from "./feedback/ErrorAlert";
@@ -21,7 +20,7 @@ export default function TagSelect({
   selectedTags,
   setSelectedTags,
 }: TagSelectProps) {
-  const { data: topics, isLoading, isSuccess } = useGetTopicsQuery();
+  const { data: topics = [], isError } = useGetTopicsQuery();
 
   // Update the state of selected topic IDs whenever new values are selected/unselected
   const handleChange = (event: SelectChangeEvent<string[]>) => {
@@ -34,7 +33,6 @@ export default function TagSelect({
 
   // Render the Chip UI component to display the selected tag
   const renderChip = (tagId: string) => {
-    if (!isSuccess) return <></>;
     const topic = topics.find((topic) => topic.id === Number(tagId))!;
     return <Chip key={tagId} label={topic.name} />;
   };
@@ -60,11 +58,7 @@ export default function TagSelect({
           </Box>
         )}
       >
-        {isLoading ? (
-          <Box display={"flex"}>
-            <CircularProgress />
-          </Box>
-        ) : !isSuccess ? (
+        {isError ? (
           <ErrorAlert message="Error fetching topics" />
         ) : (
           topics.map((topic) => (

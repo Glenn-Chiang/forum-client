@@ -3,11 +3,13 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AuthPayload } from "../auth/AuthPayload";
 import {
   Comment,
+  CommentList,
   CommentUpdate,
   NewComment,
   NewPost,
   NewUser,
   Post,
+  PostList,
   PostTagsUpdate,
   PostUpdate,
   Topic,
@@ -23,12 +25,14 @@ import { serializeRequestBody } from "./serialization";
 
 interface getPostsQueryArgs {
   page?: number;
+  limit?: number;
   sortBy?: string;
   topicId?: string;
 }
 
 interface getPostCommentsQueryArgs {
   postId: number;
+  limit?: number;
   page?: number;
   sortBy?: string;
 }
@@ -52,17 +56,17 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     // Queries
 
-    getPosts: builder.query<Post[], getPostsQueryArgs>({
-      query: ({ page = 1, sortBy, topicId }) =>
-        `/posts?page=${page}${sortBy ? `&sort_by=${sortBy}` : ""}${
-          topicId ? `&topic_id=${topicId}` : ""
-        }`,
+    getPosts: builder.query<PostList, getPostsQueryArgs>({
+      query: ({ page = 1, limit = 10, sortBy, topicId }) =>
+        `/posts?page=${page}&limit=${limit}${
+          sortBy ? `&sort_by=${sortBy}` : ""
+        }${topicId ? `&topic_id=${topicId}` : ""}`,
       providesTags: ["posts"],
       transformResponse: parsePosts,
     }),
-    getPostComments: builder.query<Comment[], getPostCommentsQueryArgs>({
-      query: ({ postId, page = 1, sortBy }) =>
-        `/posts/${postId}/comments?page=${page}${
+    getPostComments: builder.query<CommentList, getPostCommentsQueryArgs>({
+      query: ({ postId, page = 1, limit = 10, sortBy }) =>
+        `/posts/${postId}/comments?page=${page}&limit=${limit}${
           sortBy ? `&sort_by=${sortBy}` : ""
         }`,
       providesTags: (_res, _err, { postId }) => [

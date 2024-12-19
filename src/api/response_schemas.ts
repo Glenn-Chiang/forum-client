@@ -9,21 +9,21 @@ const camelize = <T extends Record<string, unknown>>(
   val: T
 ): CamelCasedPropertiesDeep<T> => camelCase(val) as CamelCasedPropertiesDeep<T>;
 
-const userSchema = z
+export const userSchema = z
   .object({
     id: z.number(),
     username: z.string(),
   })
   .transform(camelize);
 
-const topicSchema = z
+export const topicSchema = z
   .object({
     id: z.number(),
     name: z.string(),
   })
   .transform(camelize);
 
-const postSchema = z
+export const postSchema = z
   .object({
     id: z.number(),
     title: z.string(),
@@ -36,7 +36,12 @@ const postSchema = z
   })
   .transform(camelize);
 
-const commentSchema = z
+export const postListSchema = z.object({
+  data: z.array(postSchema),
+  total_count: z.number(),
+});
+
+export const commentSchema = z
   .object({
     id: z.number(),
     content: z.string(),
@@ -48,15 +53,22 @@ const commentSchema = z
   })
   .transform(camelize);
 
+export const commentListSchema = z.object({
+  data: z.array(commentSchema),
+  total_count: z.number(),
+});
+
 export const parseUser = (data: unknown) => userSchema.parse(data);
-export const parseUsers = (data: unknown) => z.array(userSchema).parse(data);
+export const parseUsers = (data: unknown) =>
+  z.array(userSchema).parse(data);
 
 export const parsePost = (data: unknown) => postSchema.parse(data);
-export const parsePosts = (data: unknown) => z.array(postSchema).parse(data);
+export const parsePosts = (data: unknown) => postListSchema.parse(data);
 
 export const parseComment = (data: unknown) => commentSchema.parse(data);
-export const parseComments = (data: unknown) =>
-  z.array(commentSchema).parse(data);
+export const parseComments = (data: unknown) => commentListSchema.parse(data);
 
 export const parseTopic = (data: unknown) => topicSchema.parse(data);
-export const parseTopics = (data: unknown) => z.array(topicSchema).parse(data);
+export const parseTopics = (data: unknown) =>
+  z.array(topicSchema).parse(data);
+

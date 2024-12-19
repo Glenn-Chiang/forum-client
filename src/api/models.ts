@@ -1,24 +1,17 @@
-export interface User {
-  id: number,
-  username: string
-}
+import { z } from "zod"
+import { commentListSchema, commentSchema, postListSchema, postSchema, topicSchema, userSchema } from "./response_schemas"
+
+export type User = z.infer<typeof userSchema>
+export type Post = z.infer<typeof postSchema>
+export type PostList = z.infer<typeof postListSchema>
+export type Comment = z.infer<typeof commentSchema>
+export type CommentList = z.infer<typeof commentListSchema>
+export type Topic = z.infer<typeof topicSchema>
 
 export interface NewUser {
   username: string,
   password: string
 }
-
-export interface Post {
-  id: number,
-  title: string,
-  content: string,
-  authorId: number,
-  author?: User,
-  topics: Topic[],
-  createdAt: string,
-  updatedAt: string
-}
-
 export interface NewPost {
   title: string,
   content: string,
@@ -37,16 +30,6 @@ export interface PostTagsUpdate {
   topicIds: number[]
 }
 
-export interface Comment {
-  id: number, 
-  content: string,
-  postId: number,
-  authorId: number,
-  author: User,
-  createdAt: string,
-  updatedAt: string
-}
-
 export interface NewComment {
   content: string,
   postId: number,
@@ -59,7 +42,4 @@ export interface CommentUpdate {
   content: string
 }
 
-export interface Topic {
-  id: number
-  name: string
-}
+
