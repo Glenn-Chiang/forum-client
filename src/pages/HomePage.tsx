@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { useState } from "react";
 import { useGetPostsQuery } from "../api/apiSlice";
 import ErrorAlert from "../components/feedback/ErrorAlert";
@@ -14,8 +14,8 @@ export default function Home() {
   const maxPostsPerPage = 10; // Max number of posts to display per page
 
   // Get sorting order from search params
-  const [searchParams] = useSearchParams()
-  const sortBy = searchParams.get("sort_by") || undefined
+  const [searchParams] = useSearchParams();
+  const sortBy = searchParams.get("sort_by") || undefined;
 
   // Fetch posts
   const {
@@ -32,7 +32,10 @@ export default function Home() {
 
   return (
     <>
-      <SortSelect/>
+      <Box padding={1}>
+        <SortSelect />
+      </Box>
+        <Divider/>
       {isLoading ? (
         <LoadingSkeleton />
       ) : isSuccess ? (

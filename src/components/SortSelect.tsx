@@ -24,7 +24,7 @@ export default function SortSelect() {
   return (
     <FormControl
       size="small"
-      sx={{ textTransform: "capitalize", m: 1, minWidth: 120 }}
+      sx={{ textTransform: "capitalize", minWidth: 120 }}
     >
       <InputLabel id="sort-select">Sort</InputLabel>
       <Select
