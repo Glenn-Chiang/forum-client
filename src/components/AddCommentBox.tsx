@@ -3,19 +3,11 @@ import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useCreateCommentMutation } from "../api/apiSlice";
-import { selectCurrentUserId } from "../auth/authSlice";
-import {
-  CommentFormSchema,
-  commentFormSchema,
-} from "../api/form_schemas";
-import { useAppSelector } from "../store";
+import { CommentFormSchema, commentFormSchema } from "../api/form_schemas";
 import ErrorAlert from "./feedback/ErrorAlert";
 import { useToast } from "./feedback/ToastProvider";
 
 export default function AddCommentBox({ postId }: { postId: number }) {
-  // Get current userId
-  const userId = useAppSelector(selectCurrentUserId);
-
   // Redux mutation function
   const [createComment, { isLoading }] = useCreateCommentMutation();
 
@@ -36,7 +28,7 @@ export default function AddCommentBox({ postId }: { postId: number }) {
   // On submit, send comment data to the api
   const onSubmit: SubmitHandler<CommentFormSchema> = async (data) => {
     try {
-      await createComment({ ...data, postId, authorId: userId! }).unwrap();
+      await createComment({ ...data, postId }).unwrap();
       // Clear the text field
       reset();
 

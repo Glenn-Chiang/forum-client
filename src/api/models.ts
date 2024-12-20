@@ -15,7 +15,6 @@ export interface NewUser {
 export interface NewPost {
   title: string,
   content: string,
-  authorId: number,
   topicIds: number[]
 }
 
@@ -33,7 +32,6 @@ export interface PostTagsUpdate {
 export interface NewComment {
   content: string,
   postId: number,
-  authorId: number
 }
 
 export interface CommentUpdate {

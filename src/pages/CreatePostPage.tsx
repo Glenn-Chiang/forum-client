@@ -17,7 +17,7 @@ export default function CreatePostPage() {
   const userId = useAppSelector(selectCurrentUserId);
 
   // Keep track of currently selected tags
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   // Redux mutation function
   const [createPost, { isLoading }] = useCreatePostMutation();
@@ -41,8 +41,7 @@ export default function CreatePostPage() {
     try {
       const newPost = await createPost({
         ...data,
-        authorId: userId!,
-        topicIds: selectedTags.map(tagId => Number(tagId))
+        topicIds: selectedTags.map((tagId) => Number(tagId)),
       }).unwrap();
 
       // Redirect to the newly-created post page
@@ -69,45 +68,48 @@ export default function CreatePostPage() {
       gap={1}
     >
       <Typography variant="h6">Create a Post</Typography>
-      <TagSelect selectedTags={selectedTags} setSelectedTags={setSelectedTags}/>
+      <TagSelect
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
       <Controller
         name="title"
         defaultValue=""
         control={control}
         render={({ field }) => (
           <TextField
-          fullWidth
-          placeholder="Title"
-          {...field}
-          error={!!errors.title}
-          helperText={errors.title?.message}
+            fullWidth
+            placeholder="Title"
+            {...field}
+            error={!!errors.title}
+            helperText={errors.title?.message}
           />
         )}
-        />
+      />
       <Controller
         name="content"
         defaultValue=""
         control={control}
         render={({ field }) => (
           <TextField
-          fullWidth
-          placeholder="Content"
-          multiline
-          minRows={5}
-          maxRows={10}
-          {...field}
-          error={!!errors.content}
-          helperText={errors.content?.message}
+            fullWidth
+            placeholder="Content"
+            multiline
+            minRows={5}
+            maxRows={10}
+            {...field}
+            error={!!errors.content}
+            helperText={errors.content?.message}
           />
         )}
-        />
+      />
       {error && <ErrorAlert message={error} />}
       <Button
         type="submit"
         sx={{ maxWidth: 100 }}
         variant="contained"
         disabled={isLoading}
-        >
+      >
         Post
       </Button>
     </Box>
