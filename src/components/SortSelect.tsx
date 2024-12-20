@@ -8,11 +8,11 @@ import {
 import { useSearchParams } from "react-router";
 
 export default function SortSelect() {
-  const sortOptions = ["new", "old"];
+  const sortOptions = ["new", "old", "votes"];
 
   // Get sortBy option from URL search param
   const [searchParams, setSearchParams] = useSearchParams();
-  const sortBy = searchParams.get("sort") || "new";
+  const sortBy = searchParams.get("sort") || "new"; // Sort by new by default
 
   // Set URL search param when option is selected
   const handleChange = (event: SelectChangeEvent) => {

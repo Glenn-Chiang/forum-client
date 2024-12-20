@@ -28,8 +28,8 @@ export const postSchema = z
     id: z.number(),
     title: z.string(),
     content: z.string(),
-    author_id: z.number(),
-    author: userSchema.optional(),
+    author_id: z.number().nullable(),
+    author: userSchema.nullable(), // Author is null if the corresponding user is deleted
     topics: z.array(topicSchema),
     created_at: z.string(),
     updated_at: z.string(),
@@ -46,8 +46,8 @@ export const commentSchema = z
     id: z.number(),
     content: z.string(),
     post_id: z.number(),
-    author_id: z.number(),
-    author: userSchema,
+    author_id: z.number().nullable(),
+    author: userSchema.nullable(), // Author is null if the corresponding user is deleted
     created_at: z.string(),
     updated_at: z.string(),
   })
