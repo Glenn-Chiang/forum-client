@@ -97,7 +97,10 @@ export const apiSlice = createApi({
 
     getPosts: builder.query<PostList, getPostsQueryArgs>({
       query: buildGetPostsUrl,
-      providesTags: ["posts"],
+      providesTags: (result) =>
+        result
+          ? ["posts", ...result.data.map(({ id }) => ({ type: "posts" as const, id }))]
+          : ["posts"],
       transformResponse: parsePosts,
     }),
     getPostComments: builder.query<CommentList, getPostCommentsQueryArgs>({

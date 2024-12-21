@@ -32,7 +32,7 @@ export default function PostCard({ post }: { post: Post }) {
   // Whether the user has upvoted, downvoted or not voted. This is only for optimistic UI updates, and does not actually involve sending any requests.
   const [userVote, setUserVote] = useState<VoteValue>(post.userVote);
   const [votes, setVotes] = useState(post.votes);
-  console.log(userVote)
+  
   // Hooks to send voting requests
   const [updateVote] = useUpdatePostVoteMutation();
   const [removeVote] = useDeletePostVoteMutation();
