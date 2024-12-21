@@ -12,8 +12,10 @@ import {
   PostList,
   PostTagsUpdate,
   PostUpdate,
+  PostVoteUpdate,
   Topic,
   User,
+  VoteID,
 } from "./models";
 import {
   parseComments,
@@ -38,31 +40,41 @@ interface getPostCommentsQueryArgs {
 }
 
 // Build the GET /posts url with the given query parameters
-const buildGetPostsUrl = ({ page = 1, limit = 10, sortBy, tags }: getPostsQueryArgs): string => {
+const buildGetPostsUrl = ({
+  page = 1,
+  limit = 10,
+  sortBy,
+  tags,
+}: getPostsQueryArgs): string => {
   // Set query params
-  const queryParams = new URLSearchParams()
-  queryParams.set("page", page.toString())
-  queryParams.set("limit", limit.toString())
-  queryParams.set("sort", sortBy || "new")
+  const queryParams = new URLSearchParams();
+  queryParams.set("page", page.toString());
+  queryParams.set("limit", limit.toString());
+  queryParams.set("sort", sortBy || "new");
 
   // Add multiple "tag" param values
   if (tags) {
-    tags.forEach(tag => queryParams.append("tag", tag.toString()))
+    tags.forEach((tag) => queryParams.append("tag", tag.toString()));
   }
 
-  return `/posts?${queryParams.toString()}`
-}
+  return `/posts?${queryParams.toString()}`;
+};
 
 // Build the GET /posts/:id/comments url with the given query parameters
-const buildGetPostCommentsUrl = ({ postId, page = 1, limit = 10, sortBy}: getPostCommentsQueryArgs): string => {
+const buildGetPostCommentsUrl = ({
+  postId,
+  page = 1,
+  limit = 10,
+  sortBy,
+}: getPostCommentsQueryArgs): string => {
   // Set query params
-  const queryParams = new URLSearchParams()
-  queryParams.set("page", page.toString())
-  queryParams.set("limit", limit.toString())
-  queryParams.set("sort", sortBy || "new")
+  const queryParams = new URLSearchParams();
+  queryParams.set("page", page.toString());
+  queryParams.set("limit", limit.toString());
+  queryParams.set("sort", sortBy || "new");
 
-  return `/posts/${postId}/comments?${queryParams.toString()}`
-}
+  return `/posts/${postId}/comments?${queryParams.toString()}`;
+};
 
 // Redux slice to handle data fetching and caching
 export const apiSlice = createApi({
@@ -179,6 +191,28 @@ export const apiSlice = createApi({
       invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
     }),
 
+    // Upvote/downvote post
+    updatePostVote: builder.mutation<void, PostVoteUpdate>({
+      query: (data) => ({
+        url: `/posts/${data.postId}/votes/${data.userId}`,
+        method: "PUT",
+        body: { value: data.value },
+      }),
+      // When post is upvoted/downvoted, refetch the post
+      invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
+    }),
+
+    // Remove vote
+    deletePostVote: builder.mutation<void, VoteID>({
+      query: (voteId) => ({
+        url: `/posts/${voteId.postId}/votes/${voteId.userId}`,
+        method: "DELETE",
+      }),
+      // When post vote is removed, refetch the post
+      invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
+    }),
+
+    // Register
     createUser: builder.mutation<User, NewUser>({
       query: (data) => ({
         url: "/users",
@@ -187,6 +221,7 @@ export const apiSlice = createApi({
       }),
     }),
 
+    // Login
     login: builder.mutation<AuthPayload, NewUser>({
       query: (data) => ({
         url: "/login",
@@ -202,13 +237,18 @@ export const {
   useGetPostQuery,
   useGetPostCommentsQuery,
   useGetTopicsQuery,
+
   useCreatePostMutation,
   useUpdatePostMutation,
   useUpdatePostTagsMutation,
   useDeletePostMutation,
+  useUpdatePostVoteMutation,
+  useDeletePostVoteMutation,
+
   useCreateCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+
   useCreateUserMutation,
   useLoginMutation,
 } = apiSlice;

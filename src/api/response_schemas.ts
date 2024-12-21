@@ -23,6 +23,9 @@ export const topicSchema = z
   })
   .transform(camelize);
 
+// Allow user_vote values are 0, 1 and -1
+export const userVoteSchema = z.union([z.literal(0), z.literal(1), z.literal(-1)])
+
 export const postSchema = z
   .object({
     id: z.number(),
@@ -31,6 +34,8 @@ export const postSchema = z
     author_id: z.number().nullable(),
     author: userSchema.nullable(), // Author is null if the corresponding user is deleted
     topics: z.array(topicSchema),
+    votes: z.number(),
+    user_vote: userVoteSchema,
     created_at: z.string(),
     updated_at: z.string(),
   })
