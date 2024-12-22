@@ -17,6 +17,13 @@ export interface PostVoteUpdate {
   voteChange: number // Change in total number of votes, used for optimistic UI update
 }
 
+export interface CommentVoteUpdate {
+  commentId: number,
+  userId: number,
+  userVote: VoteValue, // Whether the user has upvoted, downvoted or not voted
+  voteChange: number // Change in total number of votes, used for optimistic UI update
+}
+
 export interface NewUser {
   username: string,
   password: string

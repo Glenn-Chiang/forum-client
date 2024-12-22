@@ -53,6 +53,8 @@ export const commentSchema = z
     post_id: z.number(),
     author_id: z.number().nullable(),
     author: userSchema.nullable(), // Author is null if the corresponding user is deleted
+    votes: z.number(),
+    user_vote: userVoteSchema,
     created_at: z.string(),
     updated_at: z.string(),
   })

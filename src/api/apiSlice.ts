@@ -14,7 +14,7 @@ import {
   PostUpdate,
   PostVoteUpdate,
   Topic,
-  User
+  User,
 } from "./models";
 import {
   parseComments,
@@ -204,25 +204,48 @@ export const apiSlice = createApi({
         method: "PUT",
         body: { value: data.userVote },
       }),
-      // Optimistically update cached data for votes
+      // Optimistic cache update for post votes
       async onQueryStarted(voteData, { dispatch, getState }) {
-        const endpoints = apiSlice.util.selectInvalidatedBy(getState(), [
-          "posts",
-        ]);
-        for (const { endpointName, originalArgs } of endpoints) {
+        // Update cache entry for "posts" tag
+        for (const {
+          endpointName,
+          originalArgs,
+        } of apiSlice.util.selectInvalidatedBy(getState(), ["posts"])) {
           // Only update getPosts endpoint cache
           if (endpointName !== "getPosts") continue;
           dispatch(
             apiSlice.util.updateQueryData(
               endpointName,
               originalArgs,
-              (draft) => {
+              (postList) => {
                 // Find the target post to update
-                const post = draft.data.find(
+                const posts = postList.data
+                const post = posts.find(
                   (post) => post.id === voteData.postId
                 );
                 if (!post) return;
-                
+
+                post.userVote = voteData.userVote;
+                post.votes += voteData.voteChange;
+              }
+            )
+          );
+        }
+
+        // Update cache entry for {type:"posts",id: post.id} tag
+        for (const {
+          endpointName,
+          originalArgs,
+        } of apiSlice.util.selectInvalidatedBy(getState(), [
+          { type: "posts", id: voteData.postId },
+        ])) {
+          if (endpointName !== "getPost") continue;
+
+          dispatch(
+            apiSlice.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (post) => {
                 post.userVote = voteData.userVote
                 post.votes += voteData.voteChange
               }

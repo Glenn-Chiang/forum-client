@@ -12,7 +12,7 @@ import { formatDistanceToNow } from "date-fns";
 import {
   useUpdatePostVoteMutation
 } from "../api/apiSlice";
-import { Post } from "../api/models";
+import { Post, VoteValue } from "../api/models";
 import { selectCurrentUserId } from "../auth/authSlice";
 import { useAppSelector } from "../store";
 import EditTagsDialog from "./EditTagsDialog";
@@ -30,12 +30,12 @@ export default function PostCard({ post }: { post: Post }) {
   // Hooks to send voting requests
   const [updateVote] = useUpdatePostVoteMutation();
 
-  const handleVote = (value: boolean) => {
+  const handleVote = (userVote: VoteValue, voteChange: number) => {
     // Unauthenticated users cannot vote
     if (!authenticated) {
       return;
     }
-    updateVote({ postId: post.id, userId, value: value ? 1 : -1 });
+    updateVote({ postId: post.id, userId, userVote, voteChange});
   };
 
   return (

@@ -17,7 +17,7 @@ export default function CommentSection() {
   // Get sorting order from search params
   const [searchParams] = useSearchParams();
   const sortBy = searchParams.get("sort") || undefined;
-  
+
   const {
     data: commentList,
     isLoading,
@@ -35,27 +35,22 @@ export default function CommentSection() {
   // Total number of pages required to display all comments
   const numPages = Math.ceil(totalComments / maxCommentsPerPage);
 
-  if (isLoading) {
-    return <LoadingSkeleton />;
-  }
-  if (isError) {
-    return <ErrorAlert />;
-  }
-
-  if (comments.length <= 0) {
-    return (
-      <Box padding={2}>
-        <Typography color="text.secondary">No comments</Typography>
-      </Box>
-    );
-  }
-
   return (
     <>
       <Box padding={1}>
         <SortSelect />
       </Box>
-      <CommentList comments={comments} />
+      {isLoading ? (
+        <LoadingSkeleton />
+      ) : isError ? (
+        <ErrorAlert />
+      ) : comments.length <= 0 ? (
+        <Box padding={2}>
+          <Typography color="text.secondary">No comments</Typography>
+        </Box>
+      ) : (
+        <CommentList comments={comments} />
+      )}
       <Box padding={1}>
         <PaginationBar page={page} setPage={setPage} count={numPages} />
       </Box>
