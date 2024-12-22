@@ -9,18 +9,16 @@ import {
   Typography,
 } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
-import { useState } from "react";
-import { Post, VoteValue } from "../api/models";
+import {
+  useUpdatePostVoteMutation
+} from "../api/apiSlice";
+import { Post } from "../api/models";
 import { selectCurrentUserId } from "../auth/authSlice";
 import { useAppSelector } from "../store";
 import EditTagsDialog from "./EditTagsDialog";
 import PostActionMenu from "./PostActionMenu";
 import TagList from "./TagList";
 import VoteButtons from "./VoteButtons";
-import {
-  useDeletePostVoteMutation,
-  useUpdatePostVoteMutation,
-} from "../api/apiSlice";
 
 export default function PostCard({ post }: { post: Post }) {
   const userId = useAppSelector(selectCurrentUserId);
@@ -29,27 +27,15 @@ export default function PostCard({ post }: { post: Post }) {
   // Whether the current user is the author of the post, which determines whether they can edit the post
   const authorized = userId === post.authorId;
 
-  // Whether the user has upvoted, downvoted or not voted. This is only for optimistic UI updates, and does not actually involve sending any requests.
-  const [userVote, setUserVote] = useState<VoteValue>(post.userVote);
-  const [votes, setVotes] = useState(post.votes);
-  
   // Hooks to send voting requests
   const [updateVote] = useUpdatePostVoteMutation();
-  const [removeVote] = useDeletePostVoteMutation();
 
-  const handleVote = (value: VoteValue) => {
+  const handleVote = (value: boolean) => {
     // Unauthenticated users cannot vote
     if (!authenticated) {
-      return
+      return;
     }
-
-    setUserVote(value);
-
-    if (value === 0) {
-      removeVote({postId: post.id, userId})
-    } else {
-      updateVote({postId: post.id, userId, value})
-    }
+    updateVote({ postId: post.id, userId, value: value ? 1 : -1 });
   };
 
   return (
@@ -83,10 +69,9 @@ export default function PostCard({ post }: { post: Post }) {
       </CardContent>
       <CardActions>
         <VoteButtons
-          userVote={userVote}
-          vote={handleVote}
-          votes={votes}
-          setVotes={setVotes}
+          userVote={post.userVote}
+          votes={post.votes}
+          updateVote={handleVote}
           disabled={!authenticated}
         />
       </CardActions>

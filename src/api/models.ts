@@ -10,10 +10,11 @@ export type Topic = z.infer<typeof topicSchema>
 
 export type VoteValue = z.infer<typeof userVoteSchema>
 
-// Composite ID to identify a particular user's vote for a particular post
-export interface VoteID {
+export interface PostVoteUpdate {
   postId: number,
-  userId: number
+  userId: number,
+  userVote: VoteValue, // Whether the user has upvoted, downvoted or not voted
+  voteChange: number // Change in total number of votes, used for optimistic UI update
 }
 
 export interface NewUser {
@@ -37,11 +38,6 @@ export interface PostTagsUpdate {
   topicIds: number[]
 }
 
-export interface PostVoteUpdate {
-  postId: number,
-  userId: number,
-  value: 1 | -1
-}
 
 export interface NewComment {
   content: string,

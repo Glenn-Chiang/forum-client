@@ -8,15 +8,11 @@ import {
 } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
 import { Link as RouterLink } from "react-router";
+import { useUpdatePostVoteMutation } from "../api/apiSlice";
 import { Post, VoteValue } from "../api/models";
-import TagList from "./TagList";
-import { useAppSelector } from "../store";
 import { selectCurrentUserId } from "../auth/authSlice";
-import { useState } from "react";
-import {
-  useDeletePostVoteMutation,
-  useUpdatePostVoteMutation,
-} from "../api/apiSlice";
+import { useAppSelector } from "../store";
+import TagList from "./TagList";
 import VoteButtons from "./VoteButtons";
 
 // PostItem is displayed as an item within a PostList and links to the page for that post
@@ -25,27 +21,15 @@ export default function PostItem({ post }: { post: Post }) {
   // Whether the current user is logged in
   const authenticated = !!userId;
 
-  // Whether the user has upvoted, downvoted or not voted. This is only for optimistic UI updates, and does not actually involve sending any requests.
-  const [userVote, setUserVote] = useState<VoteValue>(post.userVote);
-  const [votes, setVotes] = useState(post.votes);
-
   // Hooks to send voting requests
   const [updateVote] = useUpdatePostVoteMutation();
-  const [removeVote] = useDeletePostVoteMutation();
 
-  const handleVote = (value: VoteValue) => {
+  const handleVote = (userVote: VoteValue, voteChange: number) => {
     // Unauthenticated users cannot vote
     if (!authenticated) {
       return;
     }
-
-    setUserVote(value);
-
-    if (value === 0) {
-      removeVote({ postId: post.id, userId });
-    } else {
-      updateVote({ postId: post.id, userId, value });
-    }
+    updateVote({ postId: post.id, userId, userVote, voteChange });
   };
 
   return (
@@ -76,12 +60,11 @@ export default function PostItem({ post }: { post: Post }) {
 
         <Typography color="textSecondary">{post.content}</Typography>
       </ListItem>
-      <Box p={1} sx={{}}>
+      <Box p={1}>
         <VoteButtons
-          userVote={userVote}
-          vote={handleVote}
-          votes={votes}
-          setVotes={setVotes}
+          userVote={post.userVote}
+          votes={post.votes}
+          updateVote={handleVote}
           disabled={!authenticated}
         />
       </Box>

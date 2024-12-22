@@ -14,8 +14,7 @@ import {
   PostUpdate,
   PostVoteUpdate,
   Topic,
-  User,
-  VoteID,
+  User
 } from "./models";
 import {
   parseComments,
@@ -99,7 +98,11 @@ export const apiSlice = createApi({
       query: buildGetPostsUrl,
       providesTags: (result) =>
         result
-          ? ["posts", ...result.data.map(({ id }) => ({ type: "posts" as const, id }))]
+          ? // Assign a cache tag to each post in the list
+            [
+              "posts",
+              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+            ]
           : ["posts"],
       transformResponse: parsePosts,
     }),
@@ -199,20 +202,34 @@ export const apiSlice = createApi({
       query: (data) => ({
         url: `/posts/${data.postId}/votes/${data.userId}`,
         method: "PUT",
-        body: { value: data.value },
+        body: { value: data.userVote },
       }),
-      // When post is upvoted/downvoted, refetch the post
-      invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
-    }),
-
-    // Remove vote
-    deletePostVote: builder.mutation<void, VoteID>({
-      query: (voteId) => ({
-        url: `/posts/${voteId.postId}/votes/${voteId.userId}`,
-        method: "DELETE",
-      }),
-      // When post vote is removed, refetch the post
-      invalidatesTags: (_res, _err, { postId: id }) => [{ type: "posts", id }],
+      // Optimistically update cached data for votes
+      async onQueryStarted(voteData, { dispatch, getState }) {
+        const endpoints = apiSlice.util.selectInvalidatedBy(getState(), [
+          "posts",
+        ]);
+        for (const { endpointName, originalArgs } of endpoints) {
+          // Only update getPosts endpoint cache
+          if (endpointName !== "getPosts") continue;
+          dispatch(
+            apiSlice.util.updateQueryData(
+              endpointName,
+              originalArgs,
+              (draft) => {
+                // Find the target post to update
+                const post = draft.data.find(
+                  (post) => post.id === voteData.postId
+                );
+                if (!post) return;
+                
+                post.userVote = voteData.userVote
+                post.votes += voteData.voteChange
+              }
+            )
+          );
+        }
+      },
     }),
 
     // Register
@@ -246,7 +263,6 @@ export const {
   useUpdatePostTagsMutation,
   useDeletePostMutation,
   useUpdatePostVoteMutation,
-  useDeletePostVoteMutation,
 
   useCreateCommentMutation,
   useUpdateCommentMutation,
