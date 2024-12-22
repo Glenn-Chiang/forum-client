@@ -7,7 +7,6 @@ import CreatePostPage from "./pages/CreatePostPage";
 import EditPostPage from "./pages/EditPostPage";
 import Home from "./pages/HomePage";
 import PostPage from "./pages/PostPage";
-import ProfilePage from "./pages/ProfilePage";
 
 export default function AppRouter() {
   return (
@@ -21,10 +20,6 @@ export default function AppRouter() {
             <Route path=":id" element={<PostPage/>}/>
             <Route path="create" element={<CreatePostPage/>}/>
             <Route path=":id/edit" element={<EditPostPage/>}/>
-          </Route>
-
-          <Route path="profiles">
-            <Route path=":id" element={<ProfilePage/>}/>
           </Route>
         </Route>
         

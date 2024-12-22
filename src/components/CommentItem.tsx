@@ -1,21 +1,41 @@
 import {
+  Box,
   Divider,
-  Link,
   ListItem,
   ListItemText,
   Typography,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router";
-import { Comment } from "../api/models";
-import CommentActionMenu from "./CommentActionMenu";
-import { useAppSelector } from "../store";
-import { selectCurrentUserId } from "../auth/authSlice";
 import { formatDistanceToNow } from "date-fns";
+import { Comment, VoteValue } from "../api/models";
+import { selectCurrentUserId } from "../auth/authSlice";
+import { useAppSelector } from "../store";
+import CommentActionMenu from "./CommentActionMenu";
+import VoteButtons from "./VoteButtons";
+import { useUpdateCommentVoteMutation } from "../api/apiSlice";
 
 export default function CommentItem({ comment }: { comment: Comment }) {
-  // Check if the current user is the comment author
   const userId = useAppSelector(selectCurrentUserId);
+  // Whether the current user is logged in
+  const authenticated = !!userId;
+  // Whether the current user is the author of the comment, which determines their edit permissions
   const authorized = userId === comment.authorId;
+
+  // Hooks to send voting requests
+  const [updateVote] = useUpdateCommentVoteMutation();
+
+  const handleVote = (userVote: VoteValue, voteChange: number) => {
+    // Unauthenticated users cannot vote
+    if (!authenticated) {
+      return;
+    }
+    updateVote({
+      commentId: comment.id,
+      postId: comment.postId,
+      userId,
+      userVote,
+      voteChange,
+    });
+  };
 
   return (
     <>
@@ -30,13 +50,9 @@ export default function CommentItem({ comment }: { comment: Comment }) {
       >
         <ListItemText
           primary={
-            <Link
-              component={RouterLink}
-              to={`/profiles/${comment.authorId}`}
-              underline="hover"
-            >
-              {comment.author.username}
-            </Link>
+            <Typography color="primary">
+              {comment.author ? comment.author.username : "[deleted]"}
+            </Typography>
           }
           secondary={formatDistanceToNow(comment.createdAt, {
             addSuffix: true,
@@ -45,6 +61,14 @@ export default function CommentItem({ comment }: { comment: Comment }) {
         {authorized && <CommentActionMenu comment={comment} />}
         <Typography>{comment.content}</Typography>
       </ListItem>
+      <Box p={1}>
+        <VoteButtons
+          userVote={comment.userVote}
+          votes={comment.votes}
+          updateVote={handleVote}
+          disabled={!authenticated}
+        />
+      </Box>
       <Divider variant="middle" component={"li"} />
     </>
   );

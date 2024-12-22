@@ -19,6 +19,7 @@ export interface PostVoteUpdate {
 
 export interface CommentVoteUpdate {
   commentId: number,
+  postId: number,
   userId: number,
   userVote: VoteValue, // Whether the user has upvoted, downvoted or not voted
   voteChange: number // Change in total number of votes, used for optimistic UI update

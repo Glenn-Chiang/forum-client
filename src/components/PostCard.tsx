@@ -9,9 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { formatDistanceToNow } from "date-fns";
-import {
-  useUpdatePostVoteMutation
-} from "../api/apiSlice";
+import { useUpdatePostVoteMutation } from "../api/apiSlice";
 import { Post, VoteValue } from "../api/models";
 import { selectCurrentUserId } from "../auth/authSlice";
 import { useAppSelector } from "../store";
@@ -23,7 +21,7 @@ import VoteButtons from "./VoteButtons";
 export default function PostCard({ post }: { post: Post }) {
   const userId = useAppSelector(selectCurrentUserId);
   // Whether the current user is logged in
-  const authenticated = !!userId
+  const authenticated = !!userId;
   // Whether the current user is the author of the post, which determines whether they can edit the post
   const authorized = userId === post.authorId;
 
@@ -35,7 +33,7 @@ export default function PostCard({ post }: { post: Post }) {
     if (!authenticated) {
       return;
     }
-    updateVote({ postId: post.id, userId, userVote, voteChange});
+    updateVote({ postId: post.id, userId, userVote, voteChange });
   };
 
   return (
@@ -44,7 +42,7 @@ export default function PostCard({ post }: { post: Post }) {
       <CardHeader
         title={post.title}
         subheader={
-          post.author?.username +
+          (post.author ? post.author.username : "[deleted]") +
           ", " +
           formatDistanceToNow(post.createdAt, { addSuffix: true })
         }
