@@ -80,7 +80,7 @@ const buildGetPostCommentsUrl = ({
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8080", // API domain
+    baseUrl: import.meta.env.VITE_API_URL, // Base url for backend API
     prepareHeaders: (headers) => {
       // Retrieve token from localStorage and set Authorization header using Bearer scheme
       const token = localStorage.getItem("token");
