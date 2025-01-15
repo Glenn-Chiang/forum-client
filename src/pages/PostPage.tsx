@@ -6,6 +6,8 @@ import CommentSection from "../components/CommentSection";
 import ErrorAlert from "../components/feedback/ErrorAlert";
 import LoadingSkeleton from "../components/LoadingSkeleton";
 import PostCard from "../components/PostCard";
+import { useAppSelector } from "../store";
+import { selectCurrentUserId } from "../auth/authSlice";
 
 export default function PostPage() {
   const { id: postId } = useParams();
@@ -16,6 +18,9 @@ export default function PostPage() {
     isSuccess,
     isError,
   } = useGetPostQuery(postId!);
+
+  const userId = useAppSelector(selectCurrentUserId);
+  const authenticated = !!userId;
 
   if (isLoading) {
     return <LoadingSkeleton />;
@@ -28,9 +33,9 @@ export default function PostPage() {
   if (isSuccess) {
     return (
       <section>
-        <BackButton/>
+        <BackButton />
         <PostCard post={post} />
-        <AddCommentBox postId={Number(postId)} />
+        {authenticated && <AddCommentBox postId={Number(postId)} />}
         <CommentSection />
       </section>
     );
