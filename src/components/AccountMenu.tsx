@@ -1,14 +1,9 @@
 import { AccountCircle } from "@mui/icons-material";
-import { IconButton, Link, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router";
-import { selectCurrentUserId } from "../auth/authSlice";
-import { useAppSelector } from "../store";
 import LogoutDialog from "./LogoutDialog";
 
 export default function AccountMenu() {
-  const userId = useAppSelector(selectCurrentUserId);
-
   // Menu UI state
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const open = Boolean(anchor);
@@ -25,14 +20,6 @@ export default function AccountMenu() {
         <AccountCircle />
       </IconButton>
       <Menu open={open} onClose={handleClose} anchorEl={anchor}>
-        <Link
-          component={RouterLink}
-          to={`/profiles/${userId}`}
-          color="inherit"
-          underline="none"
-        >
-          <MenuItem>Profile</MenuItem>
-        </Link>
         <LogoutDialog
           triggerButton={<MenuItem>Logout</MenuItem>}
           handleCancel={handleClose}
