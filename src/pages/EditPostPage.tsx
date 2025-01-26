@@ -8,8 +8,13 @@ import { postFormSchema, PostFormSchema } from "../api/form_schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useToast } from "../components/feedback/ToastProvider";
+import { useAppSelector } from "../store";
+import { selectCurrentUserId } from "../auth/authSlice";
 
 export default function EditPostPage() {
+  // Get current userId
+  const userId = useAppSelector(selectCurrentUserId);
+
   // Fetch the post that we want to edit
   const { id: postId } = useParams();
   const { data: post, isLoading, isSuccess } = useGetPostQuery(postId!);
@@ -51,6 +56,11 @@ export default function EditPostPage() {
 
   if (isLoading) {
     return <LoadingSkeleton />;
+  }
+
+  // Unauthenticated or unauthorized users
+  if (!userId || userId !== post?.authorId) {
+    return <ErrorAlert message="You cannot edit this post" />;
   }
 
   if (!isSuccess) {
